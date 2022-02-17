@@ -1,15 +1,5 @@
-# Project Proposal: Heading
-
-- Descriptive Title for the Project
-  - Pick a title that will be meaningful on your resume
-- Team Name
-- Your choice: pick something fun or something professional or both
-- Team Name for Github
-  - To be assigned, as teams are formed
-  - Team under class organization will be created
-  - Members of the team added to it
-  - Team repository (of the same name as the team) will be created
-- Team Members
+# **exampleusageplz**
+### **Team Members: Aiden Rutter, Justin Langston, Racheal Dylewski**
 
 # Project Proposal: Introduction
 - Overview
