@@ -17,7 +17,7 @@ This project is related to foraging for information when coding. Some such tools
 
 ### Team Members
 Aiden Rutter is a masters student in Computer Science at the University of Tennessee, Knoxville. 
-He's had internship and research experiences at places like Amazon and Oak Ridge National Lab, applying git workflow, agile, and test-driven development. Justin Langston is a masters student in Computer Science at the University of Tennessee, Knoxville. He's had two internships at mastercard applying the agile methodology and techniques for the processing of large transaction batch files.
+He's had internship and research experiences at places like Amazon and Oak Ridge National Lab, applying git workflow, agile, and test-driven development. Justin Langston is a masters student in Computer Science at the University of Tennessee, Knoxville. He's had two internships at mastercard applying the agile methodology and techniques for the processing of large transaction batch files. Racheal Dylewski is also a master's student in computer science at the University of Tennessee, Knoxville.  She has had internships and research experience at AT&T, Discovery, and UTK working with various subjects such as software defined networks, web and mobile development, and creating tools for developer productivity.
 
 ## Customer Value
 ### Customer Need
