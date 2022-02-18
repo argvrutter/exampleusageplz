@@ -17,7 +17,7 @@ This project is related to foraging for information when coding. Some such tools
 
 ### Team Members
 Aiden Rutter is a masters student in Computer Science at the University of Tennessee, Knoxville. 
-He's had internship and research experiences at places like Amazon and Oak Ridge National Lab, applying git workflow, agile, and test-driven development.
+He's had internship and research experiences at places like Amazon and Oak Ridge National Lab, applying git workflow, agile, and test-driven development. Justin Langston is a masters student in Computer Science at the University of Tennessee, Knoxville. He's had two internships at mastercard applying the agile methodology and techniques for the processing of large transaction batch files.
 
 ## Customer Value
 ### Customer Need
@@ -66,11 +66,11 @@ Tools such as Python, flask, mongodb, React.js will be used. WorldOfCode can be 
 
 ## Team
 ### Skills
-Aiden and Racheal has front end / full stack development background working with PAIRS lab, and from coursework (COSC340). Aiden has experience with repository mining and devops as well as REST APIs. All team members are proficient in Python.
+Aiden and Racheal has front end / full stack development background working with PAIRS lab, and from coursework (COSC340). Aiden has experience with repository mining and devops as well as REST APIs. Justin has a back end focused background with some full stack experience. All team members are proficient in Python.
 
 ### Roles
 Aiden will the be project manager for the entirety of the project.
-Roles will be primarily fixed, however, if needed we may branch out and help eachother with specific parts of the project. 
+Roles will be primarily fixed, however, if needed we may branch out and help eachother with specific parts of the project. Aiden will focus primarily on the repository mining, Racheal will focus primarily on front end implementation, and Justin will focus primarily on back end implementation. 
 
 ## Project Management
 The completion on a minimum viable working version of this project seems feasible. The team plans to meet once to twice a week
