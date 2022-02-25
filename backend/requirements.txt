@@ -1,0 +1,13 @@
+Flask
+flasgger
+requests
+coloredlogs
+flask-marshmallow
+SQLAlchemy
+python-dotenv
+apispec
+pydantic
+Flask-Security-Too>=4.0.0
+bcrypt
+pytz
+Authlib
