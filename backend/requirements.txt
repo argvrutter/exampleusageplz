@@ -1,4 +1,5 @@
 Flask
+Flask-SQLAlchemy
 flasgger
 requests
 coloredlogs
@@ -11,3 +12,6 @@ Flask-Security-Too>=4.0.0
 bcrypt
 pytz
 Authlib
+pymongo
+flask-mongoengine
+odmantic
