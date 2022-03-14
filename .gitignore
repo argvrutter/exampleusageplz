@@ -132,3 +132,5 @@ dmypy.json
 
 # EUP
 docker.env
+
+mining/build

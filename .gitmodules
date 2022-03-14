@@ -1,0 +1,6 @@
+[submodule "mining/example/js/CodeRibbon"]
+	path = mining/example/js/CodeRibbon
+	url = git@github.com:CodeRibbon/CodeRibbon.git
+[submodule "mining/extern/tree-sitter"]
+	path = mining/extern/tree-sitter
+	url = git@github.com:tree-sitter/tree-sitter.git
