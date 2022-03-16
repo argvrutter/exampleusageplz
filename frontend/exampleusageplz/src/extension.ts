@@ -5,14 +5,17 @@ import Provider from './provider';
 
 export function activate(context: vscode.ExtensionContext) {
 	const provider = new Provider();
-	
-	console.log('Extension running!');
 
-	let disposable = vscode.commands.registerCommand('exampleusageplz.getUsage', () => {
-		return provider.getFunc();
+	let codeLensProviderDisposable = vscode.languages.registerCodeLensProvider(
+		"*",
+		provider
+	);
+	
+    let codelensDisposable = vscode.commands.registerCommand("exampleusageplz.addUsageInfo", (args: any) => {
+        vscode.window.showInformationMessage(`CodeLens action clicked with args=${args}`);
     });
 
-	context.subscriptions.push(disposable);
+	context.subscriptions.push(codelensDisposable);
 }
 
 export function deactivate() {}

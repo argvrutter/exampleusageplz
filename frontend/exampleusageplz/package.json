@@ -10,7 +10,10 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:exampleusageplz.getUsage"
+		"onCommand:exampleusageplz.getUsage",
+		"onCommand:exampleusageplz.addUsageInfo",
+		"*",
+		"onLanguage:javascript"
 	],
 	"main": "./dist/extension.js",
 	"contributes": {
@@ -20,8 +23,8 @@
 				"title": "Get Usage"
 			},
 			{
-				"command": "extension.addConsoleLog",
-				"title": "Add Console Log"
+				"command": "exampleusageplz.addUsageInfo",
+				"title": "Add usage info"
 			  }
 		],
 		"menus" : {
