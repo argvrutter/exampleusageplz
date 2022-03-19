@@ -4,7 +4,8 @@ Collection of references
 import datetime
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
-from api import db
+#from api import db
+from database import db
 
 class Collection(db.Model):
     __tablename__ = 'collections'

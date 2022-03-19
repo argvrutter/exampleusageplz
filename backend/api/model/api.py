@@ -3,7 +3,7 @@ Module, API,library, framework, etc. that provides a set of functions and classe
 One to many relationship with calls. Collection.
 '''
 from .collection import Collection
-from api import db
+from database import db
 import datetime
 
 class API(Collection):

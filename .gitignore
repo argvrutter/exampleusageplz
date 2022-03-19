@@ -137,3 +137,6 @@ mining/build
 
 # Extension
 **/node_modules
+
+# sqllite test database
+backend/data.db

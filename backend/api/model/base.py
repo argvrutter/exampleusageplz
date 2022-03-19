@@ -4,7 +4,8 @@ Columns shared by most/all models
 import datetime
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
-from api import db
+#from api import db
+from database import db
 
 class Base(db.Model):
     id = db.Column(db.Integer, primary_key=True)

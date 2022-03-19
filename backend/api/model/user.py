@@ -5,7 +5,8 @@ Users can also be authenticated using Github OAuth
 import datetime
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
-from app.db import Base
+#from app.db import Base
+from database import db
 
 
 class User(Base):
