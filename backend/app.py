@@ -25,17 +25,6 @@ def create_app():
 
     db.init_app(app)
 
-    # add test models to db
-    from api.model.api import API
-    from api.model.post import Post
-    from api.model.call import Call
-    
-    api = API(name='test_api')
-    post = Post(content='test_post')
-    call = Call(full_name='test_call')
-
-    db.create_all()
-    
     @app.before_first_request
     def create_table():
         db.create_all()
