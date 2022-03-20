@@ -14,12 +14,8 @@ class Base(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
-    def as_dict(self):
-        return {
-            'id': self.id,
-            'created_at': self.created_at,
-            'updated_at': self.updated_at
-        }
-
     def __repr__(self):
         return '<%s>' % self.name
+
+    def as_dict(self):
+        return self.__dict__
