@@ -6,7 +6,7 @@ Required
 
 from .base import Base
 from flask import Flask, request, jsonify, abort
-from database import db
+from ..app import app, db
 
 class Post(Base):
     __tablename__ = 'posts'
@@ -59,3 +59,70 @@ class Post(Base):
 
     def __repr__(self):
         return '<Post %r>' % self.title
+
+'''
+#### routes for post
+TODO: All routes require a valid token.
+
+* GET: /api/posts - returns all posts (paginated)
+* GET: /api/posts/</id/> - returns a single post
+* POST: /api/posts - creates a new post
+* PUT: /api/posts/</id/> - updates a post
+* DELETE: /api/posts/</id/> - deletes a post
+
+'''
+@app.route('/posts', methods=['POST'])
+def create_post():
+    """Create a new post.
+
+    Returns:
+        dict: The created post.
+    """
+    data = request.get_json()
+    return create_post(data)
+
+@app.route('/posts', methods=['GET'])
+def get_posts():
+    """Get all posts.
+
+    Returns:
+        list: A list of all posts.
+    """
+    posts = Post.query.all()
+    return jsonify([post.to_dict() for post in posts])
+
+@app.route('/posts/<int:post_id>', methods=['PUT'])
+def update_post(post_id):
+    """Update a post.
+
+    Args:
+        post_id (int): The id of the post.
+
+    Returns:
+        dict: The updated post.
+    """
+    post = Post.query.get(post_id)
+    if not post:
+        abort(404)
+    data = request.get_json()
+    for key, value in data.items():
+        setattr(post, key, value)
+    db.session.commit()
+    return jsonify(post.to_dict())
+
+@app.route('/posts/<int:post_id>', methods=['DELETE'])
+def delete_post(post_id):
+    """Delete a post.
+
+    Args:
+        post_id (int): The id of the post.
+
+    Returns:
+        dict: The deleted post.
+    """
+    post = Post.query.get(post_id)
+    if not post:
+        abort(404)
+    db.session.delete(post)
+    db.session.commit()
+    return jsonify(post.to_dict())
