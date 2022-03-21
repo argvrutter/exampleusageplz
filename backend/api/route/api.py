@@ -4,6 +4,7 @@ from api.model.api import API
 from api.model.call import Call
 #from api.schema.welcome import WelcomeSchema
 from flask import Flask,request,redirect, jsonify, abort
+from log import logger, DEBUG
 
 api_api = Blueprint('api', __name__)
 from database import db
