@@ -8,54 +8,6 @@ post_api = Blueprint('api', __name__)
 from database import db
 
 
-# Create Post Method
-# @post_api.route('/post/create', methods = ['GET','POST'])
-# @swag_from({
-#     'responses': {
-#         HTTPStatus.OK.value: {
-#             'description': 'Welcome to the Flask Starter Kit',
-#         }
-#     }
-# })
-# def create_post():
-#     print(request, flush=True)
-#     print(request.args)#.get('format')
-#     if request.method == 'GET':
-#         return 'create_post GET request', 200
- 
-#     if request.method == 'POST':
-#         content = str(request.args.get('content'))
-#         print(content)
-#         c = PostModel.query.filter_by(content=content).first()
-#         if not c:
-#             post = PostModel(content=content)
-#             db.session.add(post)
-#             db.session.commit()
-#             return 'create_post: successfully added ' + str(content) + ' to the database', 200 #redirect('/api')
-#         return 'create_post: ' + str(content) + 'already exsists in database'
-
-# # Delete Post Method
-# @post_api.route('/post/delete', methods = ['GET','POST'])
-# @swag_from({
-#     'responses': {
-#         HTTPStatus.OK.value: {
-#             'description': 'Welcome to the Flask Starter Kit',
-#         }
-#     }
-# })
-# def delete_post():
-#     print(request, flush=True)
-#     print(request.args)#.get('format')
-#     content = str(request.args.get('content'))
-#     print(content)
-#     c = PostModel.query.filter_by(content=content).first()
-#     if c:
-#         db.session.delete(c)
-#         db.session.commit()
-#         return 'delete_post: successfully deleted ' + str(content) + ' from the database', 200
-#     abort(404)
-
-
 '''
 #### routes for post
 TODO: All routes require a valid token.
@@ -128,3 +80,17 @@ def delete_post(post_id):
     db.session.delete(post)
     db.session.commit()
     return jsonify(post.to_dict())
+
+'''TODO: search
+get calls based on any combination of the following criteria:
+API: GET /api/apis/search 
+Calls: GET /api/calls/search
+'''
+@post_api.route('/posts/search', methods=['GET'])
+def search_posts(api=None, call=None):
+    """Search posts.
+
+    Returns:
+        list: A list of all posts meeting the search criteria.
+    """
+    pass
