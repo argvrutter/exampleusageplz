@@ -4,7 +4,7 @@ from api.model.call import Call
 #from api.schema.welcome import WelcomeSchema
 from flask import Flask,request,redirect, jsonify, abort
 
-call_api = Blueprint('api', __name__)
+call_api = Blueprint('call', __name__)
 from database import db
 
 '''
@@ -23,7 +23,7 @@ class Call(Base):
 * DELETE: /api/call/<call_id>
 '''
 # Create
-@call_api.route('/api/calls', methods=['POST'])
+@call_api.route('/calls', methods=['POST'])
 def create_call():
     """Create a call.
     Returns:
@@ -36,7 +36,7 @@ def create_call():
     return call.to_dict(), 201
 
 # Read
-@call_api.route('/api/calls', methods=['GET'])
+@call_api.route('/calls', methods=['GET'])
 def get_calls():
     """Get all calls.
     Returns:
@@ -46,7 +46,7 @@ def get_calls():
     return jsonify([call.to_dict() for call in calls])
 
 # read one call
-@call_api.route('/api/calls/<int:call_id>', methods=['GET'])
+@call_api.route('/calls/<int:call_id>', methods=['GET'])
 def get_call(call_id):
     """Get a single call.
     Args:
@@ -60,7 +60,7 @@ def get_call(call_id):
     return call.to_dict()
 
 # Update
-@call_api.route('/api/calls/<int:call_id>', methods=['PUT'])
+@call_api.route('/calls/<int:call_id>', methods=['PUT'])
 def update_call(call_id):
     """Update a call.
     Args:
@@ -78,7 +78,7 @@ def update_call(call_id):
     return call.to_dict()
 
 # Delete
-@call_api.route('/api/calls/<int:call_id>', methods=['DELETE'])
+@call_api.route('/calls/<int:call_id>', methods=['DELETE'])
 def delete_call(call_id):
     """Delete a call.
     Args:
@@ -95,7 +95,7 @@ def delete_call(call_id):
 
 # search call by name
 # TODO: test cases for search
-@call_api.route('/api/calls/search', methods=['GET'])
+@call_api.route('/calls/search', methods=['GET'])
 def search_call():
     """Search call by name.
     Returns:

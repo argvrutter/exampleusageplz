@@ -19,7 +19,7 @@ from database import db
 * DELETE: /api/apis/</id/> - deletes an api
 '''
 # Create
-@api_api.route('/api/apis', methods=['POST'])
+@api_api.route('/apis', methods=['POST'])
 def create_api():
     """Create a new api.
     Returns:
@@ -33,7 +33,7 @@ def create_api():
     db.session.commit()
     return api.to_dict(), 201
 
-@api_api.route('/api/apis', methods=['GET'])
+@api_api.route('/apis', methods=['GET'])
 def get_apis():
     """Get all apis.
     Returns:
@@ -43,7 +43,7 @@ def get_apis():
     return jsonify([api.to_dict() for api in apis])
 
 # Read
-@api_api.route('/api/apis/<int:api_id>', methods=['GET'])
+@api_api.route('/apis/<int:api_id>', methods=['GET'])
 def get_api(api_id):
     """Get a single api.
     Args:
@@ -57,7 +57,7 @@ def get_api(api_id):
     return api.to_dict()
 
 # get calls
-@api_api.route('/api/apis/<int:api_id>/calls', methods=['GET'])
+@api_api.route('/apis/<int:api_id>/calls', methods=['GET'])
 def get_api_callees(api_id):
     """Get all calls for an api.
     Args:
@@ -72,7 +72,7 @@ def get_api_callees(api_id):
     return jsonify([callee.to_dict() for callee in callees])
 
 # string search
-@api_api.route('/api/apis/search/<query>', methods=['GET'])
+@api_api.route('/apis/search/<query>', methods=['GET'])
 def get_api_search(query):
     """Get all apis that match the query. Can be a list of comma separated values.
     Args:
@@ -84,7 +84,7 @@ def get_api_search(query):
     return jsonify([api.to_dict() for api in apis])
 
 # return all calls that match the query.
-@api_api.route('/api/apis/<int:api_id>/calls/search/<query>', methods=['GET'])
+@api_api.route('/apis/<int:api_id>/calls/search/<query>', methods=['GET'])
 def get_api_callees_search(api_id, query):
     """Get all calls that match the query.
     Args:
@@ -100,7 +100,7 @@ def get_api_callees_search(api_id, query):
     return jsonify([callee.to_dict() for callee in callees])
 
 # update
-@api_api.route('/api/apis/<int:api_id>', methods=['PUT'])
+@api_api.route('/apis/<int:api_id>', methods=['PUT'])
 def update_api(api_id):
     """Update an api.
     Args:
@@ -118,7 +118,7 @@ def update_api(api_id):
     return api.to_dict()
 
 # delete
-@api_api.route('/api/apis/<int:api_id>', methods=['DELETE'])
+@api_api.route('/apis/<int:api_id>', methods=['DELETE'])
 def delete_api(api_id):
     """Delete an api.
     Args:

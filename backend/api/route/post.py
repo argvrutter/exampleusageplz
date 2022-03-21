@@ -4,7 +4,7 @@ from flasgger import swag_from
 from api.model.post import Post
 #from api.schema.welcome import WelcomeSchema
 from flask import Flask,request,redirect, jsonify, abort
-post_api = Blueprint('api', __name__)
+post_api = Blueprint('post', __name__)
 from database import db
 
 
