@@ -7,7 +7,7 @@ from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 #from app.db import Base
 from database import db
-
+from base import Base
 
 class User(Base):
     __tablename__ = 'users'
@@ -20,10 +20,14 @@ class User(Base):
 
     posts = relationship('Post', backref='user', lazy='dynamic')
 
-    def __init__(self, name, email, password):
-        self.name = name
-        self.email = email
-        self.password = password
-
     def __repr__(self):
         return '<User %r>' % self.name
+
+    def as_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'email': self.email,
+            'created_at': self.created_at,
+            'updated_at': self.updated_at
+        }

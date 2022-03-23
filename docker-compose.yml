@@ -1,0 +1,40 @@
+# run the mysql server and the web server (Dev)
+version: "3.0"
+services:
+  mysql:
+    image: mysql:5.7
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_DATABASE: "password"
+      MYSQL_USER: "user"
+      MYSQL_PASSWORD: "password"
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+    restart: always
+  eup: # web server
+    image: eup
+    container_name: eup
+    ports:
+      - "80:80"
+    volumes:
+      - ./data/eup:/var/www/html
+    restart: always
+  nginx:
+    image: nginx
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./data/nginx:/etc/nginx/conf.d
+    restart: always
+  redis:
+    image: redis:5.0.5
+    container_name: redis
+    ports:
+      - "6379:6379"
+    restart: always
+  redis-server:
+    image: redis

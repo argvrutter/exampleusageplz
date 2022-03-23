@@ -1,17 +1,32 @@
 '''
-Contains example usage in the form of code.
+Contains example usage in the form of code. Has a required relationship with one user, one call, and one API.
+Optional fields include: API version string, scope. TODO: a list of tags.
+Required 
 '''
 
-from .base import Base #, db
+from .base import Base
+from flask import Flask, request, jsonify, abort
 from database import db
 
-# TODO: update this to Base model and get base model working with database
-#class Post(Base):
-class PostModel(db.Model):
-    __tablename__ = "Posts table"
-    id = db.Column(db.String(), primary_key=True)
-    content = db.Column(db.String(), nullable=False)
+class Post(Base):
+    __tablename__ = 'posts'
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    
+    # TODO: require authentication
+    # user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
-    def __init__(self, content):
-        self.id = content
-        self.content = content
+    call_id = db.Column(db.Integer, db.ForeignKey('calls.id'), nullable=False)
+
+    # required language spec, should this be index lookup?
+    lang = db.Column(db.String(10), nullable=False)
+
+    # Optional fields include: API version string, scope, and a list of tags.
+    semantic_version = db.Column(db.String(10))
+    scope = db.Column(db.String(100))
+    # TODO: tags (could encompass semantic version?)
+    # TODO: link to repository?
+
+    def __repr__(self):
+        return '<Post %r>' % self.title
