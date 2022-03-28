@@ -8,6 +8,10 @@ Sample API layout structure to be used as a baseline for other apps
 - [flasgger](https://github.com/flasgger/flasgger): Used to generate the swagger documentation
 - [flask-marshmallow](https://flask-marshmallow.readthedocs.io/en/latest/): My favourite serializer
 - [apispec](https://apispec.readthedocs.io/en/latest/): Required for the integration between marshmallow and flasgger
+- python-dotenv 
+- Flask-SQLAlchemy
+- coloredlogs
+
 
 ## Set Up
 
@@ -28,8 +32,21 @@ If we have dependency issues we can move to poetry down the line
    
 ## Tests
 
-The code is covered by tests, to run the tests please execute
+The code is covered by tests, to run the tests: 
 
+1. Install the pip enviorment requirements
+```
+pipenv install
+```   
+
+2. Start the server
+```
+pipenv run python -m flask run
 ```
 
+3. In another terminal, make sure you are in the backend folder and run the tests
+
+```
+cd exampleusageplz/backend
+pipenv run python -m unittest
 ```
