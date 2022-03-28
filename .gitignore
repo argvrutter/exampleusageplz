@@ -137,6 +137,7 @@ mining/build
 
 # Extension
 **/node_modules
+**/treeview_provider.ts
 
 # sqllite test database
 backend/data.db

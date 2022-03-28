@@ -1,21 +1,39 @@
 
-import { privateEncrypt } from 'crypto';
 import * as vscode from 'vscode';
-import Provider from './provider';
+import Provider from './codelens_provider';
+//import { ExampleUsageTreeProvider } from './treeview_provider';
+import { openInUntitled } from './functions';
 
-export function activate(context: vscode.ExtensionContext) {
-	const provider = new Provider();
+import path = require('path');
+
+export async function activate(context: vscode.ExtensionContext) {
+	const codeLensProvider = new Provider();
 
 	let codeLensProviderDisposable = vscode.languages.registerCodeLensProvider(
 		"*",
-		provider
+		codeLensProvider
 	);
-	
-    let codelensDisposable = vscode.commands.registerCommand("exampleusageplz.addUsageInfo", (args: any) => {
-        vscode.window.showInformationMessage(`CodeLens action clicked with args=${args}`);
-    });
+	/*
+	const rootPath =
+  	vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders.length > 0
+    	? vscode.workspace.workspaceFolders[0].uri.fsPath
+    	: undefined;
+			if(rootPath){
+		vscode.window.createTreeView('usageView', {
+			treeDataProvider: new ExampleUsageTreeProvider(rootPath),
+		});
+	}
+	*/
 
-	context.subscriptions.push(codelensDisposable);
+	let openCodelensDisposable = vscode.commands.registerCommand("exampleusageplz.getUsage", () => {
+		codeLensProvider.startCodelens();
+	});
+
+    let codelensDisposable = vscode.commands.registerCommand("exampleusageplz.addUsageInfo", (args: any) => {
+		openInUntitled('Test');
+    });
+	context.subscriptions.push(openCodelensDisposable,
+								codelensDisposable);
 }
 
 export function deactivate() {}

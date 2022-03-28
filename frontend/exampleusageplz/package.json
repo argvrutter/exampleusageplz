@@ -11,12 +11,18 @@
 	],
 	"activationEvents": [
 		"onCommand:exampleusageplz.getUsage",
-		"onCommand:exampleusageplz.addUsageInfo",
-		"*",
-		"onLanguage:javascript"
+		"onCommand:exampleusageplz.addUsageInfo"
 	],
 	"main": "./dist/extension.js",
 	"contributes": {
+		"views": {
+			"explorer": [
+				{
+					"id": "usageView",
+					"name": "Example Usages"
+				}
+			]
+		},
 		"commands": [
 			{
 				"command": "exampleusageplz.getUsage",
@@ -25,17 +31,8 @@
 			{
 				"command": "exampleusageplz.addUsageInfo",
 				"title": "Add usage info"
-			  }
-		],
-		"menus" : {
-			"editor/context": [
-                {
-                    "command": "exampleusageplz.getUsage",
-                    "group": "navigation"
-                    
-                }
-			]
-		}
+			}
+		]
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run package",
@@ -49,19 +46,23 @@
 		"test": "node ./out/test/runTest.js"
 	},
 	"devDependencies": {
-		"@types/vscode": "^1.65.0",
 		"@types/glob": "^7.2.0",
 		"@types/mocha": "^9.1.0",
-		"@types/node": "14.x",
+		"@types/node": "^14.18.12",
+		"@types/vscode": "^1.65.0",
 		"@typescript-eslint/eslint-plugin": "^5.12.1",
 		"@typescript-eslint/parser": "^5.12.1",
+		"@vscode/test-electron": "^2.1.2",
 		"eslint": "^8.9.0",
 		"glob": "^7.2.0",
 		"mocha": "^9.2.1",
-		"typescript": "^4.5.5",
 		"ts-loader": "^9.2.6",
+		"typescript": "^4.5.5",
 		"webpack": "^5.69.1",
-		"webpack-cli": "^4.9.2",
-		"@vscode/test-electron": "^2.1.2"
+		"webpack-cli": "^4.9.2"
+	},
+	"dependencies": {
+		"ts-morph": "^14.0.0",
+		"ts-node": "^10.7.0"
 	}
 }
