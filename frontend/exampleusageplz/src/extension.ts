@@ -13,7 +13,7 @@ export async function activate(context: vscode.ExtensionContext) {
 		"*",
 		codeLensProvider
 	);
-	/*
+/*
 	const rootPath =
   	vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders.length > 0
     	? vscode.workspace.workspaceFolders[0].uri.fsPath
@@ -24,7 +24,7 @@ export async function activate(context: vscode.ExtensionContext) {
 		});
 	}
 	*/
-
+	
 	let openCodelensDisposable = vscode.commands.registerCommand("exampleusageplz.getUsage", () => {
 		codeLensProvider.startCodelens();
 	});
