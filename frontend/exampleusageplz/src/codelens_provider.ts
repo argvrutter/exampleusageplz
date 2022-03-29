@@ -8,36 +8,9 @@ import { TextDocument,
 
 import * as ts from 'typescript';
 import { getDefinitionInfo } from './functions';
+import { SourceFile } from 'ts-morph';
 
 type FuncInfo = {name: string; line: number; pos: number};
-/*
-function printRecursiveFrom(
-  node: ts.Node, indentLevel: number, sourceFile: ts.SourceFile, checker: ts.TypeChecker
-) {
-  const indentation = "-".repeat(indentLevel);
-  const syntaxKind = ts.SyntaxKind[node.kind];
-  const nodeText = node.getText(sourceFile);
-  //console.log(`${indentation}${syntaxKind}: ${nodeText}`);
-
-  if (ts.isCallExpression(node) && node.expression) {
-    let expression : any = node.expression;
-    let func = <ts.Identifier> expression.name;
-    console.log(func);
-
-    if(func){
-      let { line, character } = 
-          sourceFile.getLineAndCharacterOfPosition(func.getStart(sourceFile));
-          console.log(`${sourceFile.fileName} (${line + 1},${character + 1}): 
-            ${nodeText}`);
-    }
-
-  }
-
-  node.forEachChild(child =>
-      printRecursiveFrom(child, indentLevel + 1, sourceFile, checker)
-  );
-}
-*/
 
 export default class Provider implements CodeLensProvider {
     private _funcList: FuncInfo[] = [];
@@ -54,9 +27,9 @@ export default class Provider implements CodeLensProvider {
         const sourceFile = ts.createSourceFile(
           "test.ts", editor.document.getText(), ts.ScriptTarget.Latest
         );
-        this.printRecursiveFrom(sourceFile, 0, sourceFile);    
+        await this.getFunctionCalls(sourceFile, 0, sourceFile);    
       }
-      //console.log(this._funcList);
+      console.log(this._funcList);
     }
 
     async provideCodeLenses(document: TextDocument): Promise<CodeLens[]> {
@@ -91,28 +64,29 @@ export default class Provider implements CodeLensProvider {
     }*/
 
   // Traverse AST tree to get function calls
-  printRecursiveFrom(
+  async getFunctionCalls(
     node: ts.Node, indentLevel: number, sourceFile: ts.SourceFile
   ) {
-    const nodeText = node.getText(sourceFile);
-
+   
     if (ts.isCallExpression(node) && node.expression) {
       let expression : any = node.expression;
       let func = <ts.Identifier> expression.name;
       let funcName : string = <any>func.escapedText;
-
+      
       if(func){
         let { line, character } = 
             sourceFile.getLineAndCharacterOfPosition(func.getStart(sourceFile));
-            //console.log(`${sourceFile.fileName} (${line + 1},${character + 1}): 
-            //  ${nodeText}`);
-        this._funcList.push({name: funcName, line: line, pos: character});
+  
+            let definition = await getDefinitionInfo(new Position(line, character));
+            if(definition){
+              this._funcList.push({name: funcName, line: line, pos: character});
+            }
       }
     }
 
-    node.forEachChild(child =>
-        this.printRecursiveFrom(child, indentLevel + 1, sourceFile)
-    );
+    await Promise.all(node.getChildren(sourceFile).map(async (child) => {
+      await this.getFunctionCalls(child, indentLevel + 1, sourceFile);
+    }));
   }
 
 }
