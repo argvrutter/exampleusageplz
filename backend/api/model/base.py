@@ -8,7 +8,6 @@ from sqlalchemy.orm import relationship
 from database import db
 from sqlalchemy.orm.attributes import QueryableAttribute
 from log import logger, DEBUG
-import json
 
 # base class, define common columns and methods
 class Base(db.Model):

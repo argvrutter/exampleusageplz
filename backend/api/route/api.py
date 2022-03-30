@@ -1,4 +1,3 @@
-from http import HTTPStatus
 from flask import Blueprint, abort
 from api.model.api import API
 from api.model.call import Call

@@ -5,7 +5,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flasgger import Swagger
 # import colored logger
-from logging import DEBUG, INFO, WARNING, ERROR, CRITICAL
+from logging import INFO
 from log import logger
 
 def create_app():
@@ -22,7 +22,7 @@ def create_app():
     app.config['SWAGGER'] = {
         'title': 'completed app',
     }
-    swagger = Swagger(app)
+    Swagger(app)
 
     ## Initialize Config
     app.config.from_pyfile('config.py')

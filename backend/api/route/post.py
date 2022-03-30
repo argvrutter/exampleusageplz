@@ -1,4 +1,3 @@
-from http import HTTPStatus
 from flask import Blueprint, abort
 from flasgger import swag_from
 from api.model.post import Post
@@ -93,4 +92,3 @@ def search_posts(api=None, call=None):
     Returns:
         list: A list of all posts meeting the search criteria.
     """
-    pass
