@@ -34,19 +34,12 @@ If we have dependency issues we can move to poetry down the line
 
 The code is covered by tests, to run the tests: 
 
-1. Install the pip enviorment requirements
+1. Install the pipenv requirements if they're not already installed
 ```
 pipenv install
 ```   
 
-2. Start the server
+2. Make sure you are in the backend folder and run the tests
 ```
-pipenv run python -m flask run
-```
-
-3. In another terminal, make sure you are in the backend folder and run the tests
-
-```
-cd exampleusageplz/backend
 pipenv run python -m unittest
 ```
