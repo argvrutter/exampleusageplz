@@ -1,0 +1,21 @@
+name: Backend tests
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.8"
+    - name: Install python dependencies
+      uses: py-actions/py-dependency-install@v3
+      with:
+        path: "backend/requirements.txt"
+    - name: Run unit tests for backend
+      run: |
+        cd backend
+        python -m unittest 
