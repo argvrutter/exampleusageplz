@@ -1,36 +1,9 @@
 import * as vscode from "vscode";
 import * as path from "path";
+import * as fs from 'fs';
+import { Config } from './config/config';
 
-// Get definition information
-export async function getDefinitionInfo(pos: vscode.Position): Promise<string | undefined>{
-    const editor = vscode.window.activeTextEditor;
-
-    if (editor) {
-        try {
-          const referenceLocation = await vscode.commands.executeCommand('vscode.executeDefinitionProvider',
-              editor.document.uri, 
-              pos 
-          )  as vscode.LocationLink[];
-
-          if(referenceLocation.length > 0){
-                let link = path.resolve(referenceLocation[0].targetUri.path);
-                if(link.includes('node_modules')){
-                    // TODO:: Get node package and return info
-                    let r = "node_modules" + "\\"+ path.sep +"(.*?)\\" + path.sep;
-                    let re = new RegExp(r);
-                    return "Test Package"; // TODO:: return info
-                }
-          }
-        } catch(e){
-                if (typeof e === "string") {
-                    console.log(e.toUpperCase()); 
-                } else if (e instanceof Error) {
-                    console.log(e.message); 
-                }
-            }
-        }
-        return undefined;
-  }
+let config: Config = require('./config/config.json');
 
 // Opens document side by side view
 export async function openInUntitled(content: string, language?: string) {
@@ -44,3 +17,56 @@ export async function openInUntitled(content: string, language?: string) {
 	});
 	console.log(vscode.window.showTextDocument.toString());
 }
+
+function pathExists(p: string): boolean {
+    try {
+      fs.accessSync(p);
+    } catch (err) {
+      return false;
+    }
+    return true;
+}
+
+// Gets module and version from package.json
+export function getDepsInPackageJson(packageJsonPath: string, workspaceRoot: string): Dependency[] {
+    if (pathExists(packageJsonPath)) {
+        const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
+   
+        const toDep = (moduleName: string, version: string): Dependency => {
+            //if (pathExists(path.join(workspaceRoot, 'node_modules', moduleName)), ) {
+            return new Dependency(moduleName, version);
+
+        };
+      
+        const deps = packageJson.dependencies
+            ? Object.keys(packageJson.dependencies).map(dep =>
+                toDep(dep, packageJson.dependencies[dep])
+            )
+            : [];
+        const devDeps = packageJson.devDependencies
+            ? Object.keys(packageJson.devDependencies).map(dep =>
+                toDep(dep, packageJson.devDependencies[dep])
+            )
+            : [];
+            
+            return deps.concat(devDeps).filter(module => !config.baseModules.includes(module._module));
+        } else {
+            return [];
+        }
+}
+      
+export class Dependency {
+    constructor(
+      public _module: string,
+      public _version: string,
+    ) {}
+}
+
+export class UsageInstance {
+    constructor(
+      public _name: string,
+      public _line: number,
+      public _character: number,
+      public _package: Dependency
+    ){}
+  }

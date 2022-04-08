@@ -3,20 +3,34 @@ import { TextDocument,
           Range, 
           CodeLensProvider, 
           window, 
-          CancellationToken,
-          Position} from 'vscode';
+          workspace,
+          Position,
+          commands,
+          LocationLink } from 'vscode';
+
+import { getDepsInPackageJson, 
+         Dependency, 
+         UsageInstance } from './functions';
 
 import * as ts from 'typescript';
-import { getDefinitionInfo } from './functions';
-import { SourceFile } from 'ts-morph';
-
-type FuncInfo = {name: string; line: number; pos: number};
+import * as path from "path";
 
 export default class Provider implements CodeLensProvider {
-    private _funcList: FuncInfo[] = [];
+    private _funcList: UsageInstance[] = [];
     private _codeLens: CodeLens[] = [];
+    private _packageList: Dependency[] = [];
 
     constructor() {
+      const rootPath =
+      workspace.workspaceFolders && workspace.workspaceFolders.length > 0
+        ? workspace.workspaceFolders[0].uri.fsPath
+        : undefined;
+        if(rootPath){
+          this._packageList = getDepsInPackageJson(
+          path.join(rootPath, 'package.json'),
+          rootPath
+        );
+      }
     }   
 
     // Starts CodeLens by filling function list
@@ -34,52 +48,39 @@ export default class Provider implements CodeLensProvider {
 
     async provideCodeLenses(document: TextDocument): Promise<CodeLens[]> {
         this._codeLens = [];
-     
+    
         for(var i=0; i<this._funcList.length; i++){
-          let line = this._funcList[i]['line'], 
-              startChar = this._funcList[i]['pos'],
-              endChar = startChar + this._funcList[i]['name'].length;
+          let line = this._funcList[i]._line, 
+              startChar = this._funcList[i]._character,
+              endChar = startChar + this._funcList[i]._name.length;
           
           let command =  {
             command : "exampleusageplz.addUsageInfo",
-            title : "Example: " + this._funcList[i]['name']
+            title : "Example: " + this._funcList[i]._name
           };
           let position = new Range(line, startChar, line, endChar);
  
           this._codeLens.push(new CodeLens(position, command));
         }
-        return this._codeLens;
-     
-      }
-      /*
-      public async getFunc() {
-        const editor = window.activeTextEditor;
-        if (editor) {
-        
-          let document = editor.document;
-          // Get the document text
-          const documentText = document.getText();
-          this._funcList = await lineNumberByIndex(documentText);
-          }
-    }*/
+        return this._codeLens;   
+  }
 
   // Traverse AST tree to get function calls
   async getFunctionCalls(
     node: ts.Node, indentLevel: number, sourceFile: ts.SourceFile
   ) {
-   
     if (ts.isCallExpression(node) && node.expression) {
       let expression : any = node.expression;
       let func = <ts.Identifier> expression.name;
-      let funcName : string = <any>func.escapedText;
+      let funcName : string = func ? <any>func.escapedText : undefined;
       
-      if(func){
+      if(funcName){
         let { line, character } = 
             sourceFile.getLineAndCharacterOfPosition(func.getStart(sourceFile));
   
-            let definition = await getDefinitionInfo(new Position(line, character));
+            let definition = await this.getDefinitionInfo(new Position(line, character));
             if(definition){
-              this._funcList.push({name: funcName, line: line, pos: character});
+              this._funcList.push(new UsageInstance(funcName, line, character, definition));
             }
       }
     }
@@ -89,25 +90,35 @@ export default class Provider implements CodeLensProvider {
     }));
   }
 
-}
-// TODO:: delete
-async function lineNumberByIndex(s : string){
-  getDefinitionInfo(new Position(7, 15));
-  // RegExp
-  var line = 0,
-      match,
-      re = /[a-zA-Z]+\([^\)]*\)(\.[^\)]*\))?/g;
-  var allLines = s.split("\n");
-  var funcList: FuncInfo[] = [];
+  private async getDefinitionInfo(pos: Position): Promise<Dependency | undefined>{
+    const editor = window.activeTextEditor;
 
-  for (var i = 0; i < allLines.length; i++) {
-        while ((match = re.exec(allLines[i])) !== null) {
-          let name = match[0].replace(/ *\([^)]*\) */g, '');
-          let definition = await getDefinitionInfo(new Position(i, match.index));
-          if(definition){
-            funcList.push({name: name, line: i, pos: match.index});
+    if (editor) {
+        try {
+          const referenceLocation = await commands.executeCommand('vscode.executeDefinitionProvider',
+              editor.document.uri, 
+              pos 
+          )  as LocationLink[];
+
+          if(referenceLocation.length > 0){
+                let link = path.resolve(referenceLocation[0].targetUri.path);
+                if(link.includes('node_modules')){
+                    let re = new RegExp("node_modules" + "\\"+ path.sep +"(.*?)\\" + path.sep);
+                    let match = link.match(re);
+                    if(match){
+                      let moduleName = match[1];
+                      return this._packageList.find(dependency => dependency._module === moduleName);
+                    }
+                }
           }
+        } catch(e){
+                if (typeof e === "string") {
+                    console.log(e.toUpperCase()); 
+                } else if (e instanceof Error) {
+                    console.log(e.message); 
+                }
+            }
         }
+        return undefined;
   }
-  return funcList;
 }

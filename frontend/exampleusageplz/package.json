@@ -15,24 +15,18 @@
 	],
 	"main": "./dist/extension.js",
 	"contributes": {
-		"views": {
-			"explorer": [
-				{
-					"id": "usageView",
-					"name": "Example Usages"
-				}
-			]
-		},
 		"commands": [
 			{
 				"command": "exampleusageplz.getUsage",
 				"title": "Get Usage"
-			},
-			{
-				"command": "exampleusageplz.addUsageInfo",
-				"title": "Add usage info"
 			}
-		]
+		],
+		"menus": {
+			"commandPalette": [{
+				"command": "exampleusageplz.getUsage",
+				"when": "editorLangId == typescript || editorLangId == typescriptreact"
+			}]
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run package",
