@@ -6,6 +6,7 @@ from api.model.post import Post
 from flask import Flask,request,redirect, jsonify, abort
 post_api = Blueprint('post', __name__)
 from database import db
+from flask_sqlalchemy import SQLAlchemy
 
 
 '''
@@ -81,6 +82,19 @@ def delete_post(post_id):
     db.session.commit()
     return jsonify(post.to_dict())
 
+@post_api.route('/posts/<int:post_id>', methods=['GET'])
+def get_post(post_id):
+    """Get all posts.
+
+    Returns:
+        list: A list of all posts.
+    """
+    post = Post.query.get(post_id)
+    if not post:
+        abort(404)
+    # TODO: Validate data via swagger schema
+    return jsonify(post.to_dict())
+
 '''TODO: search
 get calls based on any combination of the following criteria:
 API: GET /api/apis/search 
@@ -93,4 +107,47 @@ def search_posts(api=None, call=None):
     Returns:
         list: A list of all posts meeting the search criteria.
     """
-    pass
+    #Required fields: lang, Call, API
+    #Optional: semver, scope
+    lang = request.args.get('lang')
+    call = request.args.get('call_id')
+    api = request.args.get('api')
+
+    # missing a required arg
+    if lang is None or call is None or api is None:
+        abort(400)
+
+    semver = request.args.get('semver')
+    scope = request.args.get('scope')
+
+    #TODO: update to query on api
+    posts = Post.query.filter(Post.lang == lang, Post.call_id == call)#, Post.api == api)
+    if semver is not None:
+        posts = posts.filter(Post.semver == semver)
+    if scope is not None:
+        posts = posts.filter(Post.scope == scope)
+    posts = posts.all()
+    
+    if posts is None:
+        abort(404)
+    #posts = posts.all()
+    #posts = posts.paginate(page=1, per_page=15, error_out=False)
+
+    if posts is None:
+        abort(404)
+
+    #import sys
+    #print(posts,file=sys.stderr, flush=True)
+    
+    #result = dict(posts=[post.to_dict() for post in posts.items], 
+    #               total=posts.total, 
+    #               current_page=posts.page,
+    #               per_page=posts.per_page)
+                   
+    result = [post.to_dict() for post in posts]
+    
+    # do simple pagination for now
+    result = [result[i:i+5] for i in range(0, len(result), 5)]
+
+
+    return jsonify(result), 200
