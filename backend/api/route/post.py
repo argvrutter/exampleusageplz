@@ -120,29 +120,16 @@ def search_posts(api=None, call=None):
     semver = request.args.get('semver')
     scope = request.args.get('scope')
 
-    #TODO: update to query on api
-    posts = Post.query.filter(Post.lang == lang, Post.call_id == call)#, Post.api == api)
+    
+    posts = Post.query.filter(Post.lang == lang, Post.call_id == call)
     if semver is not None:
-        posts = posts.filter(Post.semver == semver)
+        posts = posts.filter(Post.semantic_version == semver)
     if scope is not None:
         posts = posts.filter(Post.scope == scope)
     posts = posts.all()
     
     if posts is None:
         abort(404)
-    #posts = posts.all()
-    #posts = posts.paginate(page=1, per_page=15, error_out=False)
-
-    if posts is None:
-        abort(404)
-
-    #import sys
-    #print(posts,file=sys.stderr, flush=True)
-    
-    #result = dict(posts=[post.to_dict() for post in posts.items], 
-    #               total=posts.total, 
-    #               current_page=posts.page,
-    #               per_page=posts.per_page)
                    
     result = [post.to_dict() for post in posts]
     
