@@ -50,17 +50,17 @@ export default class Provider implements CodeLensProvider {
         this._codeLens = [];
     
         for(var i=0; i<this._funcList.length; i++){
-          let line = this._funcList[i]._line, 
-              startChar = this._funcList[i]._character,
-              endChar = startChar + this._funcList[i]._name.length;
+          // let line = this._funcList[i]._line, 
+          //     startChar = this._funcList[i]._character,
+          //     endChar = startChar + this._funcList[i]._name.length;
           
           let command =  {
             command : "exampleusageplz.addUsageInfo",
             title : "Example: " + this._funcList[i]._name
           };
-          let position = new Range(line, startChar, line, endChar);
+          // let position = new Range(line, startChar, line, endChar);
  
-          this._codeLens.push(new CodeLens(position, command));
+          this._codeLens.push(new CodeLens(this._funcList[i]._position, command));
         }
         return this._codeLens;   
   }
@@ -112,7 +112,7 @@ export default class Provider implements CodeLensProvider {
           if(referenceLocation.length > 0){
                 let link = path.resolve(referenceLocation[0].targetUri.path);
                 if(link.includes('node_modules')){
-                    let re = new RegExp("node_modules" + "\\"+ path.sep +"(.*?)\\" + path.sep);
+                    let re = new RegExp("node_modules" + path.sep +"(.*?)" + path.sep);
                     let match = link.match(re);
                     if(match){
                       let moduleName = match[1];

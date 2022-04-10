@@ -9,15 +9,54 @@ import Provider from './codelens_provider';
  * and then prompts for a title.
  * TODO: refactor to be multi stage (1) get usage instances, (2) get title, (3) submit
  */
-export async function showQuickPick(usageInstances : UsageInstance[]) {
+export async function showQuickPick(provider: Provider) {
+	const editor = window.activeTextEditor;
+	if (!editor) {
+		return;
+	}
+	const selectedText = editor.document.getText(editor.selection);
+
+	// call getUsageInRange
+	const usageInstances = await getUsageInRange(editor.document, editor.selection, provider);
+	if (usageInstances.length === 0) {
+		window.showErrorMessage('No usage instances found in the selected range.');
+		return;
+	}
+
 	const items = usageInstances.map(usageInstance => { 
-		return `${usageInstance._line} ${usageInstance._name}`; });
-			
-	const result = await window.showQuickPick(items, {
-		placeHolder: 'Select a usage instance',
-		onDidSelectItem: item => window.showInformationMessage(`Focus ${item}`)
+		return `${usageInstance._line} ${usageInstance._name}`; 
 	});
-	window.showInformationMessage(`Got: ${result}`);
+	
+	const func = await window.showQuickPick(items, {
+		placeHolder: 'Select a usage instance'
+		// onDidSelectItem: item => window.showInformationMessage(`Focus ${item}`)
+	});
+
+	console.log(func);
+	// get the corresponding usage instance (first token is line number,)
+	const usageInstance = usageInstances.find(usageInstance => {
+		return `${usageInstance._line} ${usageInstance._name}` === func;
+	});
+	// ensure usage instance is not null
+	if (usageInstance === undefined) {
+		window.showErrorMessage('No usage instance selected.');
+		return;
+	}
+
+	console.log(usageInstance);
+
+	// get language of editor as string
+	const lang = editor.document.languageId;
+
+
+	const title = await window.showInputBox({
+		placeHolder: 'Enter a title'
+	});
+	console.log(title);
+	
+	// Create a new post
+	const post = new Post(usageInstance, title, lang, selectedText);
+	// TODO: submit to server using postUsage
 }
 
 /**
@@ -42,15 +81,17 @@ export async function getUsageInRange(document: TextDocument, range: Range, prov
  */
 export class Post {
 	public usageInstance!: UsageInstance;
-	public range: Range;
+	// public range: Range;
 	public title: string;
 	public language: string;
-	
-	constructor(usageInstance: UsageInstance, range: Range, title: string, language: string) {
+	public text: string;
+
+	constructor(usageInstance: UsageInstance, title: string, language: string, text:string) {
 		this.usageInstance = usageInstance;
-		this.range = range;
+		// this.range = range;
 		this.title = title;
 		this.language = language;
+		this.text= text;
 	}
 }
 

@@ -23,7 +23,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	// based on quickinput-sample: 
 	// https://github.com/microsoft/vscode-extension-samples/blob/main/quickinput-sample/src/extension.ts
 	let quickPostDisposable = vscode.commands.registerCommand("exampleusageplz.quickPost", async () => {
-		const result = await showQuickPick();
+		const result = await showQuickPick(codeLensProvider);
 		vscode.window.showInformationMessage(`Got: ${result}`);
 	});
 	
