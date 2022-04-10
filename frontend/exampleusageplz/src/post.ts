@@ -1,7 +1,9 @@
 // https://github.com/microsoft/vscode-extension-samples/blob/main/quickinput-sample/src/basicInput.ts
 
-import { window, TextDocument, Range, CodeLensProvider } from 'vscode';
+import { window, TextDocument, Range } from 'vscode';
 import {UsageInstance } from './functions';
+import Provider from './codelens_provider';
+
 /**
  * Show a quickInput box that presents a) a list of method invocations / usage instances
  * and then prompts for a title.
@@ -24,9 +26,13 @@ export async function showQuickPick(usageInstances : UsageInstance[]) {
  * @param range The range of the document to retrieve usage instances from.
  * @param provider The codelens provider to use to retrieve usage instances.
  */
-export async function getUsageInRange(document: TextDocument, range: Range, provider: CodeLensProvider) {
-	// TODO - this is a stub
-
+export async function getUsageInRange(document: TextDocument, range: Range, provider: Provider) {
+	// functions should be located in _provider._funcList
+	console.log(provider.funcList);
+	// filter to only those in the range
+	return provider.funcList.filter(usageInstance => {
+		return range.contains(usageInstance._position);
+	});
 }
 
 /**
