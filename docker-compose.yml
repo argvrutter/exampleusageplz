@@ -14,27 +14,31 @@ services:
     volumes:
       - ./data/mysql:/var/lib/mysql
     restart: always
-  eup: # web server
-    image: eup
-    container_name: eup
-    ports:
-      - "80:80"
-    volumes:
-      - ./data/eup:/var/www/html
-    restart: always
-  nginx:
-    image: nginx
-    container_name: nginx
-    ports:
-      - "80:80"
-    volumes:
-      - ./data/nginx:/etc/nginx/conf.d
-    restart: always
-  redis:
-    image: redis:5.0.5
-    container_name: redis
-    ports:
-      - "6379:6379"
-    restart: always
-  redis-server:
-    image: redis
+
+  # you can run this locally until I figure out the details
+  # eup: # web server
+  #   image: eup
+  #   container_name: eup
+  #   ports:
+  #     - "80:80"
+  #   volumes:
+  #     - ./data/eup:/var/www/html
+  #   restart: always
+
+  # we'd want this stuff down the line
+  # nginx:
+  #   image: nginx
+  #   container_name: nginx
+  #   ports:
+  #     - "80:80"
+  #   volumes:
+  #     - ./data/nginx:/etc/nginx/conf.d
+  #   restart: always
+  # redis:
+  #   image: redis:5.0.5
+  #   container_name: redis
+  #   ports:
+  #     - "6379:6379"
+  #   restart: always
+  # redis-server:
+  #   image: redis
