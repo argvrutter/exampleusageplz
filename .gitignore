@@ -141,3 +141,4 @@ mining/build
 
 # sqllite test database
 backend/data.db
+data/mysql

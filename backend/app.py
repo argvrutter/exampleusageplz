@@ -7,6 +7,8 @@ from flasgger import Swagger
 # import colored logger
 from logging import DEBUG, INFO, WARNING, ERROR, CRITICAL
 from log import logger
+from dotenv import load_dotenv
+import os
 
 def create_app():
     from database import db
@@ -25,15 +27,15 @@ def create_app():
     swagger = Swagger(app)
 
     ## Initialize Config
-    app.config.from_pyfile('config.py')
-
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    # app.config.from_pyfile('config.py')
+    load_dotenv('.env')
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_URI')
 
     db.init_app(app)
 
     @app.before_first_request
     def create_table():
+        logger.log(INFO, "Initializing database")
         db.create_all()
 
     #register blueprints
