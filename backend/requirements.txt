@@ -15,3 +15,4 @@ Authlib
 pymongo
 flask-mongoengine
 odmantic
+pymysql
