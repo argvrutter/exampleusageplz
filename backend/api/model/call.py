@@ -12,7 +12,12 @@ class Call(Base):
     # name should be unique
     full_name = db.Column(db.String(100), nullable=False)
     api_id = db.Column(db.Integer, db.ForeignKey('apis.id'), nullable=False)
+    
+    #link to the many to one relationship from api
+    api = db.relationship("API", back_populates="callees")
 
+    # create many to one relationship with posts
+    posts = db.relationship("Post", back_populates="call")
 
     def __repr__(self):
         return '<Call %r>' % self.full_name

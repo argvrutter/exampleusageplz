@@ -8,7 +8,8 @@ post_api = Blueprint('post', __name__)
 from database import db
 from flask_sqlalchemy import SQLAlchemy
 
-
+from api.model.api import API
+from api.model.call import Call
 '''
 #### routes for post
 TODO: All routes require a valid token.
@@ -119,11 +120,12 @@ def search_posts(api=None, call=None):
 
     semver = request.args.get('semver')
     scope = request.args.get('scope')
-
-    
-    posts = Post.query.filter(Post.lang == lang, Post.call_id == call)
+    Call.query
+    # filter post on post.call's parent.lang
+    posts = Post.query.filter(Post.call.has(Call.api.has(API.lang == lang)))
+    #posts = Post.query.filter(Post.call.api.lang == lang, Post.call_id == call)
     if semver is not None:
-        posts = posts.filter(Post.semantic_version == semver)
+        posts = posts.filter(Post.call.has(Call.api.has(API.semantic_version == semver)))
     if scope is not None:
         posts = posts.filter(Post.scope == scope)
     posts = posts.all()
