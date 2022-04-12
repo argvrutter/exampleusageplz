@@ -26,9 +26,7 @@ class TestWelcome(TestCase):
             'call_id': 1,
             #'created_at': '2018-01-01T00:00:00Z',
             #'updated_at': '2018-01-01T00:00:00Z',
-            'lang': 'js',
             # optional
-            'semantic_version': '1.0.0',
             'scope': None
         }
         self.app.delete('api/posts/1')
@@ -41,9 +39,6 @@ class TestWelcome(TestCase):
         # check that the post was created with the right data
         self.assertEqual(result['title'], data['title'])
         self.assertEqual(result['content'], data['content'])
-        self.assertEqual(result['call_id'], data['call_id'])
-        self.assertEqual(result['lang'], data['lang'])
-        self.assertEqual(result['semantic_version'], data['semantic_version'])
         self.assertEqual(result['scope'], data['scope'])
         self.assertEqual(result['id'], data['id'])
         #self.assertEqual(result['user_id'], data['user_id'])
@@ -63,9 +58,7 @@ class TestWelcome(TestCase):
             'call_id': 1,
             #'created_at': '2018-01-01T00:00:00Z',
             #'updated_at': '2018-01-01T00:00:00Z',
-            'lang': 'js',
             # optional
-            'semantic_version': '1.0.0',
             'scope': None
         }
         self.app.delete('api/posts/1')
@@ -82,9 +75,7 @@ class TestWelcome(TestCase):
             'call_id': 1,
             #'created_at': '2018-01-01T00:00:00Z',
             #'updated_at': '2018-01-01T00:00:00Z',
-            'lang': 'js',
             # optional
-            'semantic_version': '1.0.1',
             'scope': None
         }
         self.app.put('/api/posts/1', data=json.dumps(data), content_type='application/json')
@@ -95,9 +86,6 @@ class TestWelcome(TestCase):
         # check that the post was updated with the right data
         self.assertEqual(result['title'], data['title'])
         self.assertEqual(result['content'], data['content'])
-        self.assertEqual(result['call_id'], data['call_id'])
-        self.assertEqual(result['lang'], data['lang'])
-        self.assertEqual(result['semantic_version'], data['semantic_version'])
         self.assertEqual(result['scope'], data['scope'])
         self.assertEqual(result['id'], data['id'])
         #self.assertEqual(result['user_id'], data['user_id'])
@@ -117,9 +105,7 @@ class TestWelcome(TestCase):
             'call_id': 1,
             #'created_at': '2018-01-01T00:00:00Z',
             #'updated_at': '2018-01-01T00:00:00Z',
-            'lang': 'js',
             # optional
-            'semantic_version': '1.0.0',
             'scope': None
         }
         
@@ -134,9 +120,6 @@ class TestWelcome(TestCase):
 
         self.assertEqual(result['title'], data['title'])
         self.assertEqual(result['content'], data['content'])
-        self.assertEqual(result['call_id'], data['call_id'])
-        self.assertEqual(result['lang'], data['lang'])
-        self.assertEqual(result['semantic_version'], data['semantic_version'])
         self.assertEqual(result['scope'], data['scope'])
         self.assertEqual(result['id'], data['id'])
         
@@ -155,9 +138,7 @@ class TestWelcome(TestCase):
             'call_id': 1,
             #'created_at': '2018-01-01T00:00:00Z',
             #'updated_at': '2018-01-01T00:00:00Z',
-            'lang': 'js',
             # optional
-            'semantic_version': '1.0.0',
             'scope': None
         }
         rv = self.app.post('/api/posts', data=json.dumps(data), content_type='application/json')
@@ -169,9 +150,6 @@ class TestWelcome(TestCase):
         result = json.loads(rv.data)
         self.assertEqual(result['title'], data['title'])
         self.assertEqual(result['content'], data['content'])
-        self.assertEqual(result['call_id'], data['call_id'])
-        self.assertEqual(result['lang'], data['lang'])
-        self.assertEqual(result['semantic_version'], data['semantic_version'])
         self.assertEqual(result['scope'], data['scope'])
         self.assertEqual(result['id'], data['id'])
         
@@ -186,6 +164,31 @@ class TestWelcome(TestCase):
     # Test post search functionality
     def test_search(self):
 
+        # create api
+        data = dict(id = int(1), name='test1', lang='js', semantic_version='1.0.0')
+        rv = self.app.post('/api/apis', data=json.dumps(data), content_type='application/json')
+
+        # create the calls
+        data1 = dict(id = int(1), api_id=int(1), full_name='pop')
+        data2 = dict(id = int(2), api_id=int(1), full_name='push')
+
+        rv = self.app.post('/api/calls', data=json.dumps(data1), content_type='application/json')
+        rv = self.app.post('/api/calls', data=json.dumps(data2), content_type='application/json')
+
+        rv = self.app.get('/api/calls')
+        self.assertEqual(rv.status_code, 200)
+
+        # make sure it returned the right data
+        result = json.loads(rv.data)
+        self.assertEqual(result[0]['id'], data1['id'])
+        self.assertEqual(result[0]['api_id'], data1['api_id'])
+        self.assertEqual(result[0]['full_name'], data1['full_name'])
+
+        self.assertEqual(result[1]['id'], data2['id'])
+        self.assertEqual(result[1]['api_id'], data2['api_id'])
+        self.assertEqual(result[1]['full_name'], data2['full_name'])
+
+
         for i in range (0,15):
             data = {
                 'title': 'Test Post #' + str(i),
@@ -195,9 +198,7 @@ class TestWelcome(TestCase):
                 'call_id': 1,
                 #'created_at': '2018-01-01T00:00:00Z',
                 #'updated_at': '2018-01-01T00:00:00Z',
-                'lang': 'js',
                 # optional
-                'semantic_version': '1.0.0',
                 'scope': None
             }
             self.app.post('/api/posts', data=json.dumps(data), content_type='application/json')
@@ -207,10 +208,12 @@ class TestWelcome(TestCase):
         self.assertEqual(rv.status_code, 200)
         result = json.loads(rv.data)
 
+        import sys
+        # print to stderr
+        print(result, file=sys.stderr)
+
         for i in range(0, len(result),5 ):
             for j in range(i,i+5):
-                self.assertEqual(result[i][j]['lang'], 'js')
-                self.assertEqual(result[i][j]['call_id'], 1)
                 #self.assertEqual(result[i][j]['api'], 1)
 
                 self.assertEqual(result[i][j]['title'], 'Test Post #' + str(j))
