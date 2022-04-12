@@ -24,27 +24,29 @@ import {Post, Call, Api} from './interface';
  * The query includes the package name, a list of calls
  */
 
+export default class Server {
 
-
-// URL for the server
-export class Server {
-
-    // token for authentication
-    private token : string;
     // base url for the server
-    private baseUrl : string;
+    private _baseUrl : string;
+    // _token for authentication
+    private _token? : string;
 
-    // constructor: accepts a token, which will be used to authenticate requests
-    // and a base url, which will be used to make requests
-    constructor(token : string, baseUrl : string) {
-        this.token = token;
-        this.baseUrl = baseUrl;
+    // constructor
+    // TODO: accept url as URI
+    // token is optional
+    constructor(baseUrl : string, token? : string) {
+        this._baseUrl = baseUrl;
+    
+        // set the token
+        if (token) {
+            this._token = token;
+        }
     }
 
     // get a list of posts matching a Call
     public async getPostsByCall(call : Call) : Promise<Post[]> {
         // get the list of posts
-        let response = await axios.get(this.baseUrl + '/api/posts/search/' + call.name);
+        let response = await axios.get(this._baseUrl + '/api/posts/search/' + call.name);
         // return the list of posts
         // this assumes that it has a list of posts
         // TODO: this will be paginated at some point
@@ -54,7 +56,7 @@ export class Server {
     // submit a new post
     public async submitPost(post : Post) : Promise<Post> {
         // create the post
-        let response = await axios.post(this.baseUrl + '/api/posts', post);
+        let response = await axios.post(this._baseUrl + '/api/posts', post);
         // return the post
         return response.data;
     }
