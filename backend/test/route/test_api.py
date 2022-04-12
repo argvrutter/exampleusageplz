@@ -18,7 +18,10 @@ Methods:
 class TestApi(TestCase):
 
     def setUp(self):
-        self.app = create_app().test_client()
+        self.app = create_app()#.test_client()
+        self.app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
+        # set app db to use sqlite in memory
+        self.app = self.app.test_client()
         self.app.testing = True
 
     def test_api_apis_post(self):
