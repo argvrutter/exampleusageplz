@@ -36,6 +36,13 @@
 					"command": "exampleusageplz.quickPost",
 					"when": "editorLangId == typescript || editorLangId == typescriptreact"
 				}
+			],
+			"editor/context": [
+				{
+					"when": "editorLangId == typescript || editorLangId == typescriptreact && editorHasSelection",
+					"command": "exampleusageplz.quickPost",
+					"group": "1_modification"
+				}
 			]
 		}
 	},

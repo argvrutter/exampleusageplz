@@ -4,7 +4,7 @@ import { window, TextDocument, Range } from 'vscode';
 import {UsageInstance } from './functions';
 import Provider from './codelens_provider';
 import Server from './server';
-import { Post } from './interface';
+import { Post, usageInstanceToCall } from './interface';
 
 /**
  * Show a quickInput box that presents a) a list of method invocations / usage instances
@@ -57,14 +57,18 @@ export async function showQuickPick(provider: Provider) {
 		placeHolder: 'Enter a title'
 	});
 	console.log(title);
+	// ensure title is not null
+	if (title === undefined) {
+		window.showErrorMessage('No title entered.');
+		return;
+	}
 	
 	// TODO: submit to server using postUsage
 		// create a new post
 	const post = {
 		title: title,
-		language: lang,
 		content: selectedText,
-		usageInstance: usageInstance
+		call: usageInstanceToCall(usageInstance, lang)
 	};
 
 	// submit the post

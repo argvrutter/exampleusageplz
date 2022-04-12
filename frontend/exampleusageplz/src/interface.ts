@@ -14,7 +14,7 @@ import { Dependency, UsageInstance } from './functions';
 export interface Api {
     name: string;
     lang: string;
-    semver: string; // semver (validate?)
+    semver?: string; // semver (validate?)
 }
 
 /**
@@ -37,9 +37,7 @@ export interface Call {
 export interface Post {
     title: string;
     content: string;
-    language: string;
     call: Call;
-    semanticVersion?: string;
     scope?: string;
 }
 /**
@@ -47,10 +45,10 @@ export interface Post {
  * @param dependency
  * 
  */
-export function dependencyToApi(dependency: Dependency): Api {
+export function dependencyToApi(dependency: Dependency, language: string): Api {
     return {
         name: dependency._module,
-        lang: 'ts',// dependency._language,
+        lang: language,// dependency._language,
         semver: dependency._version
     };
 }
@@ -58,10 +56,10 @@ export function dependencyToApi(dependency: Dependency): Api {
 /**
  * Convert usageInstance to a Call instance.
  */
-export function usageInstanceToCall(usageInstance: UsageInstance): Call {
+export function usageInstanceToCall(usageInstance: UsageInstance, language: string): Call {
     return {
         name: usageInstance._name,
-        api: dependencyToApi(usageInstance._package)
+        api: dependencyToApi(usageInstance._package, language)
     };
 }
 
