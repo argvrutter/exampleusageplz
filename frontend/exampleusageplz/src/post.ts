@@ -3,7 +3,7 @@
 import { window, TextDocument, Range } from 'vscode';
 import {UsageInstance } from './functions';
 import Provider from './codelens_provider';
-import Server from './server';
+import Client from './client';
 import { Post, usageInstanceToCall } from './interface';
 
 /**
@@ -72,7 +72,7 @@ export async function showQuickPick(provider: Provider) {
 	};
 
 	// submit the post
-	const server = new Server(baseUrl);
+	const server = new Client(baseUrl);
 	const newPost = await server.submitPost(post);
 	console.log(newPost);
 }

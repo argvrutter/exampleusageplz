@@ -24,7 +24,7 @@ import {Post, Call, Api} from './interface';
  * The query includes the package name, a list of calls
  */
 
-export default class Server {
+export default class Client{
 
     // base url for the server
     private _baseUrl : string;
