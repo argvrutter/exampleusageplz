@@ -208,9 +208,9 @@ class TestWelcome(TestCase):
         self.assertEqual(rv.status_code, 200)
         result = json.loads(rv.data)
 
-        import sys
+        #import sys
         # print to stderr
-        print(result, file=sys.stderr)
+        #print(result, file=sys.stderr)
 
         for i in range(0, len(result),5 ):
             for j in range(i,i+5):
@@ -219,6 +219,8 @@ class TestWelcome(TestCase):
                 self.assertEqual(result[i][j]['title'], 'Test Post #' + str(j))
                 self.assertEqual(result[i][j]['content'], 'This is a test post #' + str(j))
                 self.assertEqual(result[i][j]['id'], j)
+                self.assertEqual(result[i][j]['call_id'], 1)
+
 
 
         for i in range (0,15):
