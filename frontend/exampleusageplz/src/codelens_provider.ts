@@ -50,17 +50,17 @@ export default class Provider implements CodeLensProvider {
         this._codeLens = [];
     
         for(var i=0; i<this._funcList.length; i++){
-          let line = this._funcList[i]._line, 
-              startChar = this._funcList[i]._character,
-              endChar = startChar + this._funcList[i]._name.length;
+          // let line = this._funcList[i]._line, 
+          //     startChar = this._funcList[i]._character,
+          //     endChar = startChar + this._funcList[i]._name.length;
           
           let command =  {
             command : "exampleusageplz.addUsageInfo",
             title : "Example: " + this._funcList[i]._name
           };
-          let position = new Range(line, startChar, line, endChar);
+          // let position = new Range(line, startChar, line, endChar);
  
-          this._codeLens.push(new CodeLens(position, command));
+          this._codeLens.push(new CodeLens(this._funcList[i]._position, command));
         }
         return this._codeLens;   
   }
@@ -77,10 +77,15 @@ export default class Provider implements CodeLensProvider {
       if(funcName){
         let { line, character } = 
             sourceFile.getLineAndCharacterOfPosition(func.getStart(sourceFile));
-  
+            
+            // get full position construct from ts node and construct vs.Range
+            let startPos = new Position(line, character);
+            let endPos = new Position(line, character + funcName.length);
+            let range = new Range(startPos, endPos);
+
             let definition = await this.getDefinitionInfo(new Position(line, character));
             if(definition){
-              this._funcList.push(new UsageInstance(funcName, line, character, definition));
+              this._funcList.push(new UsageInstance(funcName, line, range, definition));
             }
       }
     }
@@ -88,6 +93,10 @@ export default class Provider implements CodeLensProvider {
     await Promise.all(node.getChildren(sourceFile).map(async (child) => {
       await this.getFunctionCalls(child, indentLevel + 1, sourceFile);
     }));
+  }
+
+  public get funcList() {
+    return this._funcList;
   }
 
   private async getDefinitionInfo(pos: Position): Promise<Dependency | undefined>{
@@ -103,7 +112,7 @@ export default class Provider implements CodeLensProvider {
           if(referenceLocation.length > 0){
                 let link = path.resolve(referenceLocation[0].targetUri.path);
                 if(link.includes('node_modules')){
-                    let re = new RegExp("node_modules" + "\\"+ path.sep +"(.*?)\\" + path.sep);
+                    let re = new RegExp("node_modules" + "\\" + path.sep +"(.*?)\\" + path.sep);
                     let match = link.match(re);
                     if(match){
                       let moduleName = match[1];

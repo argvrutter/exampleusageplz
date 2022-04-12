@@ -66,7 +66,8 @@ export class UsageInstance {
     constructor(
       public _name: string,
       public _line: number,
-      public _character: number,
+      public _position: vscode.Range,
+    //   public _character: number,
       public _package: Dependency
     ){}
   }
