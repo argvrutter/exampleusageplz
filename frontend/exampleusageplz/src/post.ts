@@ -3,6 +3,8 @@
 import { window, TextDocument, Range } from 'vscode';
 import {UsageInstance } from './functions';
 import Provider from './codelens_provider';
+import Server from './server';
+import { Post } from './interface';
 
 /**
  * Show a quickInput box that presents a) a list of method invocations / usage instances
@@ -11,6 +13,8 @@ import Provider from './codelens_provider';
  */
 export async function showQuickPick(provider: Provider) {
 	const editor = window.activeTextEditor;
+	const baseUrl = 'http://localhost:5000';
+
 	if (!editor) {
 		return;
 	}
@@ -54,9 +58,19 @@ export async function showQuickPick(provider: Provider) {
 	});
 	console.log(title);
 	
-	// Create a new post
-	const post = new Post(usageInstance, title, lang, selectedText);
 	// TODO: submit to server using postUsage
+		// create a new post
+	const post = {
+		title: title,
+		language: lang,
+		content: selectedText,
+		usageInstance: usageInstance
+	};
+
+	// submit the post
+	const server = new Server(baseUrl);
+	const newPost = await server.submitPost(post);
+	console.log(newPost);
 }
 
 /**
@@ -72,35 +86,4 @@ export async function getUsageInRange(document: TextDocument, range: Range, prov
 	return provider.funcList.filter(usageInstance => {
 		return range.contains(usageInstance._position);
 	});
-}
-
-/**
- * Datastructure for Post. Will be serialized and posted to the server.
- * Contains relevant UsageInstance, range in document, title, language.
- * 
- */
-export class Post {
-	public usageInstance!: UsageInstance;
-	// public range: Range;
-	public title: string;
-	public language: string;
-	public text: string;
-
-	constructor(usageInstance: UsageInstance, title: string, language: string, text:string) {
-		this.usageInstance = usageInstance;
-		// this.range = range;
-		this.title = title;
-		this.language = language;
-		this.text= text;
-	}
-}
-
-/**
- * Post a usage instance to the server.
- * @param post The post to post.
- * @param server The server to post to.
- * @param token The token to use for authentication.
- */
-export async function postUsage(post: Post, server: string, token: string) {
-	// TODO - this is a stub
 }
