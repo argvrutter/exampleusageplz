@@ -19,11 +19,10 @@ class Post(Base):
 
     call_id = db.Column(db.Integer, db.ForeignKey('calls.id'), nullable=False)
 
-    # required language spec, should this be index lookup?
-    lang = db.Column(db.String(10), nullable=False)
+    #link to the many to one relationship from call
+    call = db.relationship('Call', back_populates="posts")
 
-    # Optional fields include: API version string, scope, and a list of tags.
-    semantic_version = db.Column(db.String(10))
+
     scope = db.Column(db.String(100))
     # TODO: tags (could encompass semantic version?)
     # TODO: link to repository?
