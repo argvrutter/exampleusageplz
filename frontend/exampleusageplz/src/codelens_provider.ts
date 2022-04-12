@@ -112,7 +112,7 @@ export default class Provider implements CodeLensProvider {
           if(referenceLocation.length > 0){
                 let link = path.resolve(referenceLocation[0].targetUri.path);
                 if(link.includes('node_modules')){
-                    let re = new RegExp("node_modules" + path.sep +"(.*?)" + path.sep);
+                    let re = new RegExp("node_modules" + "\\" + path.sep +"(.*?)\\" + path.sep);
                     let match = link.match(re);
                     if(match){
                       let moduleName = match[1];
