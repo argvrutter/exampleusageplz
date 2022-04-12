@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 /**
  * Structures for common datastructures used to interface with the server.
  * Should be used to serialize and deserialize data.
@@ -14,7 +15,7 @@ import { Dependency, UsageInstance } from './functions';
 export interface Api {
     name: string;
     lang: string;
-    semver?: string; // semver (validate?)
+    semantic_version?: string; // semver (validate?)
 }
 
 /**
@@ -24,7 +25,7 @@ export interface Api {
  * api: api object. one to many (parent)
  */
 export interface Call {
-    name: string;
+    full_name: string;
     api: Api;
 }
 
@@ -49,7 +50,7 @@ export function dependencyToApi(dependency: Dependency, language: string): Api {
     return {
         name: dependency._module,
         lang: language,// dependency._language,
-        semver: dependency._version
+        semantic_version: dependency._version
     };
 }
 
@@ -58,16 +59,7 @@ export function dependencyToApi(dependency: Dependency, language: string): Api {
  */
 export function usageInstanceToCall(usageInstance: UsageInstance, language: string): Call {
     return {
-        name: usageInstance._name,
+        full_name: usageInstance._name,
         api: dependencyToApi(usageInstance._package, language)
     };
 }
-
-/**
- * Validator for API.
- */
-export function validateApi(api: Api): boolean {
-    return api.name.length <= 100 && api.lang.length <= 10 && api.semver.length <= 10;
-}
-
-// TODO: validators for post and call

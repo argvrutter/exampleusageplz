@@ -30,6 +30,27 @@ def create_post():
     """
     data = request.get_json()
     # TODO: Validate data via swagger schema
+    # if call is passed, create a new call if it doesn't exist
+    if 'call' in data or 'call_id' not in data:
+        call_data = data['call']
+        call = Call.query.filter_by(full_name=data['call']['full_name']).first()
+        if not call:
+            # setup api
+            if 'api' in call_data or 'api_id' not in call_data:
+                api_data = call_data['api']
+                api = API.query.filter_by(name=api_data['name']).first()
+                if not api:
+                    api = API(**api_data)
+                    db.session.add(api)
+                    db.session.commit()
+                call_data['api_id'] = api.id
+                del call_data['api']
+            call = Call(**call_data)
+            db.session.add(call)
+            db.session.commit()
+        data['call_id'] = call.id
+        # remove call from data
+        del data['call']
     post = Post(**data)
     db.session.add(post)
     db.session.commit()
