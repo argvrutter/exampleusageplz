@@ -20,52 +20,41 @@ export async function openInUntitled(content: string, language?: string) {
 	console.log(vscode.window.showTextDocument.toString());
 }
 
+// Gets usage information for a specific call and displays in peek view
 export async function openPeekView(args: any){
-  const baseUrl = 'http://localhost:5000';
+  const baseUrl = config.baseUrl;
   let instance = <UsageInstance> args.instance;
 
   let client = new Client(baseUrl);
-  let call = usageInstanceToCall(instance, "typescript"); // TODO:: language
+  let call = usageInstanceToCall(instance, "typescript");
 
   if(instance){
-    // TODO:: get calls from server
-    //let posts = await client.getPostsByCall(call);
-    let posts = [
-      {
-        title: "title1",
-        content: "getFunc1",
-        call: usageInstanceToCall(instance, "typescript")
-      },
-      {
-        title: "title2",
-        content: "getFunc2",
-        call: usageInstanceToCall(instance, "typescript")
-      },
-      {
-        title: "title3",
-        content: "getFunc3",
-        call: usageInstanceToCall(instance, "typescript")
-      }
-    ];
-   
-    let locations : vscode.Location[] = [];
-    for(var i=0; i<posts.length; i++){
-      // insert into document an example
-      let uri = vscode.Uri.parse("exampleusageplz:" + posts[i].call.name + i);
-      let doc = await vscode.workspace.openTextDocument(uri);
-      // TODO:: position
-      locations.push(new vscode.Location(uri, new vscode.Range(new vscode.Position(0,0), new vscode.Position(20,20))));
-    };
+    let posts = await client.getPostsByCall(call);
 
-    // Opens peek view at codelens
-    let editor = vscode.window.activeTextEditor;
-    if(editor){
-      await vscode.commands.executeCommand("editor.action.peekLocations", 
-        editor.document.uri,
-        new vscode.Position(instance._line, instance._position.start.character),
-        locations,
-      );
-    }	
+    if(posts.length > 0){
+      posts = (<any>posts[0]);
+      console.log(posts);
+
+      let locations : vscode.Location[] = [];
+      for(var i=0; i<posts.length; i++){
+        // TODO:: somehow pass content to provider and make uri post title
+        let uri = vscode.Uri.parse("exampleusageplz:" + posts[i].content);
+        let doc = await vscode.workspace.openTextDocument(uri);
+        locations.push(new vscode.Location(doc.uri, new vscode.Range(new vscode.Position(0,0), new vscode.Position(20,20))));
+      };
+
+      // Opens peek view at codelens
+      let editor = vscode.window.activeTextEditor;
+      if(editor){
+        await vscode.commands.executeCommand("editor.action.peekLocations", 
+          editor.document.uri,
+          new vscode.Position(instance._line, instance._position.start.character),
+          locations,
+        );
+      }	
+    } else{
+      vscode.window.showErrorMessage('No usage information');
+    }
   } else {
     vscode.window.showErrorMessage('No usage information');
   }
