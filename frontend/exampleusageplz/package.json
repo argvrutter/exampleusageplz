@@ -12,7 +12,8 @@
 	"activationEvents": [
 		"onCommand:exampleusageplz.getUsage",
 		"onCommand:exampleusageplz.addUsageInfo",
-		"onCommand:exampleusageplz.quickPost"
+		"onCommand:exampleusageplz.quickPost",
+		"onLanguage:typescript"
 	],
 	"main": "./dist/extension.js",
 	"contributes": {

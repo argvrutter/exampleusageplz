@@ -6,7 +6,8 @@ import { TextDocument,
           workspace,
           Position,
           commands,
-          LocationLink } from 'vscode';
+          LocationLink, 
+          TextEditor} from 'vscode';
 
 import { getDepsInPackageJson, 
          Dependency, 
@@ -33,17 +34,20 @@ export default class Provider implements CodeLensProvider {
       }
     }   
 
-    // Starts CodeLens by filling function list
-    async startCodelens(){
-      const editor = window.activeTextEditor;
 
-      if (editor) {
+    // Starts CodeLens by filling function list
+    async startCodelens(document?: TextDocument){
+      // if editor is undefined, use active editor
+      if(!document){
+        document = window.activeTextEditor?.document;
+      }
+
+      if (document) {
         const sourceFile = ts.createSourceFile(
-          "test.ts", editor.document.getText(), ts.ScriptTarget.Latest
+          "test.ts", document.getText(), ts.ScriptTarget.Latest
         );
         await this.getFunctionCalls(sourceFile, 0, sourceFile);    
       }
-      console.log(this._funcList);
     }
 
     async provideCodeLenses(document: TextDocument): Promise<CodeLens[]> {
@@ -62,7 +66,12 @@ export default class Provider implements CodeLensProvider {
  
           this._codeLens.push(new CodeLens(this._funcList[i]._position, command));
         }
-        return this._codeLens;   
+
+        let closestCodelens = this._codeLens.filter(codelens => {
+          return codelens.range.start.line === window.activeTextEditor?.selection.start.line;
+        });
+        return this._codeLens;
+        // return closestCodelens;
   }
 
   // Traverse AST tree to get function calls
@@ -116,7 +125,7 @@ export default class Provider implements CodeLensProvider {
                     let match = link.match(re);
                     if(match){
                       let moduleName = match[1];
-                      return this._packageList.find(dependency => dependency._module === moduleName);
+                      return this._packageList.find(dep => dep._module.includes(moduleName));
                     }
                 }
           }
