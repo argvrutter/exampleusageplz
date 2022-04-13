@@ -43,12 +43,6 @@ export default class Client{
         }
     }
 
-    public async getCallBySearch(call: Call): Promise<Call[]> {
-        let response = await axios.get(this._baseUrl + '/api/calls/search', { params: {name: 'lockAsync'} });
-
-        return response.data;
-    }
-
     // get a list of posts matching a Call
     public async getPostsByCall(call : Call) : Promise<Post[] | undefined> {
         // get the list of posts

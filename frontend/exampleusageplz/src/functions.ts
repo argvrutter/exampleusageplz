@@ -30,14 +30,14 @@ export async function openPeekView(args: any){
 
   if(instance){
     let posts = await client.getPostsByCall(call);
-
+    console.log(posts);
     if(posts){
-      // posts = (<any>posts[0]);
 
       let locations : vscode.Location[] = [];
       for(var i=0; i<posts.length; i++){
-        // TODO:: somehow pass content to provider and make uri post title
-        let uri = vscode.Uri.parse("exampleusageplz:" + posts[i].content);
+        // workaround to seperate the title and content for now
+        //let uri = vscode.Uri.parse("exampleusageplz:" +  posts[i].content);
+        let uri = vscode.Uri.from({path: posts[i].title, fragment: posts[i].content, scheme: "exampleusageplz"});
         let doc = await vscode.workspace.openTextDocument(uri);
         locations.push(new vscode.Location(doc.uri, new vscode.Range(new vscode.Position(0,0), new vscode.Position(20,20))));
       };
