@@ -123,7 +123,7 @@ export default class Provider implements CodeLensProvider {
                     let match = link.match(re);
                     if(match){
                       let moduleName = match[1];
-                      return this._packageList.find(dependency => dependency._module === moduleName);
+                      return this._packageList.find(dependency => dependency._module.includes(moduleName));
                     }
                 }
           }

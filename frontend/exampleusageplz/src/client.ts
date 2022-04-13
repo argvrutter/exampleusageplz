@@ -50,14 +50,16 @@ export default class Client{
     }
 
     // get a list of posts matching a Call
-    public async getPostsByCall(call : Call) : Promise<Post[]> {
+    public async getPostsByCall(call : Call) : Promise<Post[] | undefined> {
         // get the list of posts
-        // TODO:: Accept query by name
-        let response = await axios.get(this._baseUrl + '/api/posts/search', { params: { lang : call.api.lang, call_id : call.full_name, api: call.api} }); 
-        // return the list of posts
-        // this assumes that it has a list of posts
-        // TODO: this will be paginated at some point
-        return response.data;
+        // TODO: update to specify API info
+        let response = await axios.get(this._baseUrl + '/api/calls/search', { params: {name: call.full_name} });
+        console.log(response.data);
+        // if no results, return undefined
+        if (response.data.length === 0) {
+            return undefined;
+        }
+        return response.data[0].posts;
     }
 
     // submit a new post

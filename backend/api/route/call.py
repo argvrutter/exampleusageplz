@@ -98,6 +98,7 @@ def delete_call(call_id):
 @call_api.route('/calls/search', methods=['GET'])
 def search_call():
     """Search call by name.
+    TODO: filter by API info
     Returns:
         list: A list of all calls.
     """

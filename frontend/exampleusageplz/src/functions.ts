@@ -31,9 +31,8 @@ export async function openPeekView(args: any){
   if(instance){
     let posts = await client.getPostsByCall(call);
 
-    if(posts.length > 0){
-      posts = (<any>posts[0]);
-      console.log(posts);
+    if(posts){
+      // posts = (<any>posts[0]);
 
       let locations : vscode.Location[] = [];
       for(var i=0; i<posts.length; i++){
