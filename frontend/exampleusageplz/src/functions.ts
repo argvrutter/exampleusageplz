@@ -51,6 +51,7 @@ export function getDepsInPackageJson(packageJsonPath: string, workspaceRoot: str
             
             return deps.concat(devDeps).filter(module => !config.baseModules.includes(module._module));
         } else {
+            vscode.window.showErrorMessage("Exampleusageplz: No package.json");
             return [];
         }
 }

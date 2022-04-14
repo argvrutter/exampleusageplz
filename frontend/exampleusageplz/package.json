@@ -26,6 +26,14 @@
 				"title": "Submit usage example from selected text"
 			}
 		],
+		"configuration": {
+			"properties": {
+				"exampleusageplz.exampleUsageCodeLens": {
+					"type": "boolean",
+					"default": false
+				}
+			}
+		},
 		"menus": {
 			"commandPalette": [
 				{

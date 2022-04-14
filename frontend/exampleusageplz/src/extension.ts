@@ -4,8 +4,12 @@ import Provider from './codelens_provider';
 import { openInUntitled } from './functions';
 import { showQuickPick } from './post';
 export async function activate(context: vscode.ExtensionContext) {
+	vscode.window.onDidChangeActiveTextEditor(() => {
+		console.log("editor change");
+	});
+
 	const codeLensProvider = new Provider();
-	//const tree = new ExampleUsageTreeProvider();
+
 	let codeLensProviderDisposable = vscode.languages.registerCodeLensProvider(
 		"*",
 		codeLensProvider

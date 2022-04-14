@@ -31,16 +31,23 @@ export default class Provider implements CodeLensProvider {
           rootPath
         );
       }
+
     }   
 
     // Starts CodeLens by filling function list
     async startCodelens(){
+      if (workspace.getConfiguration("exampleusageplz").get("exampleUsageCodeLens", false)){
+        workspace.getConfiguration("exampleusageplz").update("exampleUsageCodeLens", true, true);
+      }
+  
+      this._funcList = []; 
       const editor = window.activeTextEditor;
 
       if (editor) {
         const sourceFile = ts.createSourceFile(
           "test.ts", editor.document.getText(), ts.ScriptTarget.Latest
         );
+        this._funcList = []; 
         await this.getFunctionCalls(sourceFile, 0, sourceFile);    
       }
       console.log(this._funcList);
@@ -48,21 +55,18 @@ export default class Provider implements CodeLensProvider {
 
     async provideCodeLenses(document: TextDocument): Promise<CodeLens[]> {
         this._codeLens = [];
-    
-        for(var i=0; i<this._funcList.length; i++){
-          // let line = this._funcList[i]._line, 
-          //     startChar = this._funcList[i]._character,
-          //     endChar = startChar + this._funcList[i]._name.length;
-          
-          let command =  {
-            command : "exampleusageplz.addUsageInfo",
-            title : "Example: " + this._funcList[i]._name
-          };
-          // let position = new Range(line, startChar, line, endChar);
+        if (workspace.getConfiguration("exampleusageplz").get("exampleUsageCodeLens", true)) {
+          await this.startCodelens();
+          for(var i=0; i<this._funcList.length; i++){
+            let command =  {
+              command : "exampleusageplz.addUsageInfo",
+              title : "Example: " + this._funcList[i]._name
+            };
  
-          this._codeLens.push(new CodeLens(this._funcList[i]._position, command));
-        }
-        return this._codeLens;   
+            this._codeLens.push(new CodeLens(this._funcList[i]._position, command));
+          }
+      }
+      return this._codeLens;   
   }
 
   // Traverse AST tree to get function calls
@@ -116,7 +120,7 @@ export default class Provider implements CodeLensProvider {
                     let match = link.match(re);
                     if(match){
                       let moduleName = match[1];
-                      return this._packageList.find(dependency => dependency._module === moduleName);
+                      return this._packageList.find(dependency => dependency._module.includes(moduleName));
                     }
                 }
           }
