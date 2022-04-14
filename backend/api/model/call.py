@@ -21,3 +21,9 @@ class Call(Base):
 
     def __repr__(self):
         return '<Call %r>' % self.full_name
+
+    def as_dict(self, show=None, _hide=None, _path=None):
+        # return super as well as posts as a list
+        rv = super().as_dict(show, _hide, _path)
+        rv['posts'] = [post.to_dict() for post in self.posts]
+        return rv

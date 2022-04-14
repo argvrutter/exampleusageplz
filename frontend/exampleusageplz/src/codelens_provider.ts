@@ -35,6 +35,7 @@ export default class Provider implements CodeLensProvider {
 
     // Starts CodeLens by filling function list
     async startCodelens(){
+      this._funcList = [];
       const editor = window.activeTextEditor;
 
       if (editor) {
@@ -53,11 +54,17 @@ export default class Provider implements CodeLensProvider {
           // let line = this._funcList[i]._line, 
           //     startChar = this._funcList[i]._character,
           //     endChar = startChar + this._funcList[i]._name.length;
-          
+          let args = [
+            {
+              "instance": this._funcList[i],
+            }
+          ];
           let command =  {
             command : "exampleusageplz.addUsageInfo",
-            title : "Example: " + this._funcList[i]._name
+            title : "Example: " + this._funcList[i]._name,
+            arguments: args
           };
+
           // let position = new Range(line, startChar, line, endChar);
  
           this._codeLens.push(new CodeLens(this._funcList[i]._position, command));
@@ -116,7 +123,7 @@ export default class Provider implements CodeLensProvider {
                     let match = link.match(re);
                     if(match){
                       let moduleName = match[1];
-                      return this._packageList.find(dependency => dependency._module === moduleName);
+                      return this._packageList.find(dependency => dependency._module.includes(moduleName));
                     }
                 }
           }
