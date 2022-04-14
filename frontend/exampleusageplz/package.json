@@ -12,7 +12,8 @@
 	"activationEvents": [
 		"onCommand:exampleusageplz.getUsage",
 		"onCommand:exampleusageplz.addUsageInfo",
-		"onCommand:exampleusageplz.quickPost"
+		"onCommand:exampleusageplz.quickPost",
+		"exampleusageplz.quickPost"
 	],
 	"main": "./dist/extension.js",
 	"contributes": {
@@ -24,6 +25,10 @@
 			{
 				"command": "exampleusageplz.quickPost",
 				"title": "Submit usage example from selected text"
+			},
+			{
+				"command": "exampleusageplz.stopUsage",
+				"title": "Stop example usage codelens"
 			}
 		],
 		"configuration": {

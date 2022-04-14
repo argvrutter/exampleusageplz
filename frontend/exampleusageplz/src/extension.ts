@@ -24,10 +24,11 @@ export async function activate(context: vscode.ExtensionContext) {
 	);
 	
 	let openCodelensDisposable = vscode.commands.registerCommand("exampleusageplz.getUsage", async () => {
-		if (vscode.workspace.getConfiguration("exampleusageplz").get("exampleUsageCodeLens", false)){
-			vscode.workspace.getConfiguration("exampleusageplz").update("exampleUsageCodeLens", true, true);
-		}
-		//codeLensProvider.startCodelens();
+		vscode.workspace.getConfiguration("exampleusageplz").update("exampleUsageCodeLens", true);
+	});
+
+	let stopCodelensDisposable = vscode.commands.registerCommand("exampleusageplz.stopUsage", async () => {
+		vscode.workspace.getConfiguration("exampleusageplz").update("exampleUsageCodeLens", false);
 	});
 
     let codelensDisposable = vscode.commands.registerCommand("exampleusageplz.addUsageInfo", (args: any) => {

@@ -7,19 +7,6 @@ import { Config } from './config/config';
 
 let config: Config = require('./config/config.json');
 
-// Opens document side by side view
-export async function openInUntitled(content: string, language?: string) {
-
-    const document = await vscode.workspace.openTextDocument({
-        language,
-        content,
-    });
-    vscode.window.showTextDocument(document, {
-		viewColumn: vscode.ViewColumn.Beside
-	});
-	console.log(vscode.window.showTextDocument.toString());
-}
-
 // Gets usage information for a specific call and displays in peek view
 export async function openPeekView(args: any){
   const baseUrl = config.baseUrl;
@@ -30,7 +17,7 @@ export async function openPeekView(args: any){
 
   if(instance){
     let posts = await client.getPostsByCall(call);
-    console.log(posts);
+ 
     if(posts){
 
       let locations : vscode.Location[] = [];

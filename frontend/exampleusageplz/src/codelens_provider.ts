@@ -42,7 +42,6 @@ export default class Provider implements CodeLensProvider {
         const sourceFile = ts.createSourceFile(
           "test.ts", editor.document.getText(), ts.ScriptTarget.Latest
         );
-        this._funcList = []; 
         await this.getFunctionCalls(sourceFile, 0, sourceFile);    
       }
       console.log(this._funcList);
@@ -50,21 +49,21 @@ export default class Provider implements CodeLensProvider {
 
     async provideCodeLenses(document: TextDocument): Promise<CodeLens[]> {
         let codeLens : CodeLens[] = [];
+
         if (workspace.getConfiguration("exampleusageplz").get("exampleUsageCodeLens", true)) {
           await this.startCodelens();
+
           for(var i=0; i<this._funcList.length; i++){
-
-          let args = [
-            {
-              "instance": this._funcList[i],
-            }
-          ];
-          let command =  {
-            command : "exampleusageplz.addUsageInfo",
-            title : "Example: " + this._funcList[i]._name,
-            arguments: args
-          };
-
+            let args = [
+              {
+                "instance": this._funcList[i],
+              }
+            ];
+            let command =  {
+              command : "exampleusageplz.addUsageInfo",
+              title : "Example: " + this._funcList[i]._name,
+              arguments: args
+            };
             codeLens.push(new CodeLens(this._funcList[i]._position, command));
           }
       }
@@ -91,6 +90,7 @@ export default class Provider implements CodeLensProvider {
 
             let definition = await this.getDefinitionInfo(new Position(line, character));
             if(definition){
+              // Check if instance is already in the list
               let found = this._funcList.find(instance => (instance._name === funcName && instance._line === line));
               if(!found){
                 this._funcList.push(new UsageInstance(funcName, line, range, definition));
@@ -108,6 +108,7 @@ export default class Provider implements CodeLensProvider {
     return this._funcList;
   }
 
+  // Get definition information at a position if it is a node package
   private async getDefinitionInfo(pos: Position): Promise<Dependency | undefined>{
     const editor = window.activeTextEditor;
 
