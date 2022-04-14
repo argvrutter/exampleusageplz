@@ -17,7 +17,6 @@ import * as path from "path";
 
 export default class Provider implements CodeLensProvider {
     private _funcList: UsageInstance[] = [];
-    private _codeLens: CodeLens[] = [];
     private _packageList: Dependency[] = [];
 
     constructor() {
@@ -35,11 +34,7 @@ export default class Provider implements CodeLensProvider {
     }   
 
     // Starts CodeLens by filling function list
-    async startCodelens(){
-      if (workspace.getConfiguration("exampleusageplz").get("exampleUsageCodeLens", false)){
-        workspace.getConfiguration("exampleusageplz").update("exampleUsageCodeLens", true, true);
-      }
-  
+    async startCodelens() {
       this._funcList = []; 
       const editor = window.activeTextEditor;
 
@@ -54,19 +49,26 @@ export default class Provider implements CodeLensProvider {
     }
 
     async provideCodeLenses(document: TextDocument): Promise<CodeLens[]> {
-        this._codeLens = [];
+        let codeLens : CodeLens[] = [];
         if (workspace.getConfiguration("exampleusageplz").get("exampleUsageCodeLens", true)) {
           await this.startCodelens();
           for(var i=0; i<this._funcList.length; i++){
-            let command =  {
-              command : "exampleusageplz.addUsageInfo",
-              title : "Example: " + this._funcList[i]._name
-            };
- 
-            this._codeLens.push(new CodeLens(this._funcList[i]._position, command));
+
+          let args = [
+            {
+              "instance": this._funcList[i],
+            }
+          ];
+          let command =  {
+            command : "exampleusageplz.addUsageInfo",
+            title : "Example: " + this._funcList[i]._name,
+            arguments: args
+          };
+
+            codeLens.push(new CodeLens(this._funcList[i]._position, command));
           }
       }
-      return this._codeLens;   
+      return codeLens;   
   }
 
   // Traverse AST tree to get function calls
@@ -89,7 +91,10 @@ export default class Provider implements CodeLensProvider {
 
             let definition = await this.getDefinitionInfo(new Position(line, character));
             if(definition){
-              this._funcList.push(new UsageInstance(funcName, line, range, definition));
+              let found = this._funcList.find(instance => (instance._name === funcName && instance._line === line));
+              if(!found){
+                this._funcList.push(new UsageInstance(funcName, line, range, definition));
+              }
             }
       }
     }
