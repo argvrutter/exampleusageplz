@@ -25,6 +25,8 @@ export async function openPeekView(args: any){
         // workaround to seperate the title and content for now
         //let uri = vscode.Uri.parse("exampleusageplz:" +  posts[i].content);
         let uri = vscode.Uri.from({path: posts[i].title, fragment: posts[i].content, scheme: "exampleusageplz"});
+        // add .ts extension to the uri
+        uri = uri.with({path: uri.path + ".ts"});
         let doc = await vscode.workspace.openTextDocument(uri);
         locations.push(new vscode.Location(doc.uri, new vscode.Range(new vscode.Position(0,0), new vscode.Position(20,20))));
       };
