@@ -1,0 +1,95 @@
+{
+	"name": "exampleusageplz",
+	"displayName": "exampleusageplz",
+	"description": "",
+	"version": "0.0.1",
+	"engines": {
+		"vscode": "^1.64.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"onCommand:exampleusageplz.getUsage",
+		"onCommand:exampleusageplz.addUsageInfo",
+		"onCommand:exampleusageplz.quickPost",
+		"workspaceContains:package.json",
+		"exampleusageplz.quickPost"
+	],
+	"main": "./dist/extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "exampleusageplz.getUsage",
+				"title": "Get Usage"
+			},
+			{
+				"command": "exampleusageplz.quickPost",
+				"title": "Submit usage example from selected text"
+			},
+			{
+				"command": "exampleusageplz.stopUsage",
+				"title": "Stop example usage codelens"
+			}
+		],
+		"configuration": {
+			"properties": {
+				"exampleusageplz.exampleUsageCodeLens": {
+					"type": "boolean",
+					"default": false
+				}
+			}
+		},
+		"menus": {
+			"commandPalette": [
+				{
+					"command": "exampleusageplz.getUsage",
+					"when": "editorLangId == typescript || editorLangId == typescriptreact"
+				},
+				{
+					"command": "exampleusageplz.quickPost",
+					"when": "editorLangId == typescript || editorLangId == typescriptreact"
+				}
+			],
+			"editor/context": [
+				{
+					"when": "editorLangId == typescript || editorLangId == typescriptreact && editorHasSelection",
+					"command": "exampleusageplz.quickPost",
+					"group": "1_modification"
+				}
+			]
+		}
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run package",
+		"compile": "webpack",
+		"watch": "webpack --watch",
+		"package": "webpack --mode production --devtool hidden-source-map",
+		"compile-tests": "tsc -p . --outDir out",
+		"watch-tests": "tsc -p . -w --outDir out",
+		"pretest": "npm run compile-tests && npm run compile && npm run lint",
+		"lint": "eslint src --ext ts",
+		"test": "node ./out/test/runTest.js"
+	},
+	"devDependencies": {
+		"@types/glob": "^7.2.0",
+		"@types/mocha": "^9.1.0",
+		"@types/node": "^14.18.12",
+		"@types/vscode": "^1.65.0",
+		"@typescript-eslint/eslint-plugin": "^5.12.1",
+		"@typescript-eslint/parser": "^5.12.1",
+		"@vscode/test-electron": "^2.1.2",
+		"eslint": "^8.9.0",
+		"glob": "^7.2.0",
+		"mocha": "^9.2.1",
+		"ts-loader": "^9.2.6",
+		"typescript": "^4.5.5",
+		"webpack": "^5.69.1",
+		"webpack-cli": "^4.9.2"
+	},
+	"dependencies": {
+		"axios": "^0.26.1",
+		"ts-morph": "^14.0.0",
+		"ts-node": "^10.7.0"
+	}
+}
