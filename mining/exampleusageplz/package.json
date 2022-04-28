@@ -13,6 +13,7 @@
 		"onCommand:exampleusageplz.getUsage",
 		"onCommand:exampleusageplz.addUsageInfo",
 		"onCommand:exampleusageplz.quickPost",
+		"workspaceContains:package.json",
 		"exampleusageplz.quickPost"
 	],
 	"main": "./dist/extension.js",
