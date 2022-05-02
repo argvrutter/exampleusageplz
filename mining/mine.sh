@@ -21,7 +21,6 @@ for repo in $(cat repo_urls.txt); do
       # sleep for 5 seconds
       cd ..
       sleep 5
-      break
    fi
    rm -rf $repo_name
 

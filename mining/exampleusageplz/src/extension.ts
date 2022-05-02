@@ -99,7 +99,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	await Promise.all(openFiles);
 	console.log("ExampleUsage extension is now active!");
 	// exit after done
-	// vscode.commands.executeCommand("workbench.action.closeWindow");
+	vscode.commands.executeCommand("workbench.action.closeWindow");
 }
 
 export function deactivate() { }
