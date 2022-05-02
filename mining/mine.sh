@@ -1,3 +1,4 @@
+#!/bin/bash
 # make sure server is running
 
 # read github repos from repo_urls.txt
@@ -5,26 +6,23 @@
 process_string="code"
 
 for repo in $(cat repo_urls.txt); do
-    git clone $repo
-    sleep 3
-    npm install --prefix $repo
-    # TODO: open directory with vscode NOTE: don't use on your own install
-    #   code --wait $repo
-    while ! pgrep -f "$process_string"
-    do
-       echo "Waiting for $process_string"
-       sleep 3
-    done
+   git clone $repo
+   # get the repo name from the url
+   repo_name=$(echo $repo | cut -d'/' -f5)
+   echo "Processing $repo_name"
+   # break
 
-    while pgrep -f "$process_string"
-    do
-       echo "Waiting for $process_string to exit"
-       sleep 3
-    done
+   # check if package.json exists in repo dir
+   if [ -f "$repo_name/package.json" ]; then
+      # if package.json exists, run npm install
+      cd $repo_name
+      npm install
+      code .
+      # sleep for 5 seconds
+      cd ..
+      sleep 5
+      break
+   fi
+   rm -rf $repo_name
 
-    echo "Process $process_string exited"
-    
-
-    # clean up
-    rm -rf $repo
 done

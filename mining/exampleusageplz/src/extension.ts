@@ -65,7 +65,7 @@ export async function activate(context: vscode.ExtensionContext) {
 		console.log("opening file: ", f.path);
 		await vscode.workspace.openTextDocument(f.path).then(
 			async (document) => {
-				await codeLensProvider.startCodelens();
+				await codeLensProvider.startCodelens(document);
 				// get function calls
 				const filemap = codeLensProvider.funcList.map(async (func) => {
 					// get the function name
@@ -99,7 +99,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	await Promise.all(openFiles);
 	console.log("ExampleUsage extension is now active!");
 	// exit after done
-	vscode.commands.executeCommand("workbench.action.closeWindow");
+	// vscode.commands.executeCommand("workbench.action.closeWindow");
 }
 
 export function deactivate() { }

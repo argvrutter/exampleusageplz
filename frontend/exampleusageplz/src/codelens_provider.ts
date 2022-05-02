@@ -6,7 +6,9 @@ import { TextDocument,
           workspace,
           Position,
           commands,
-          LocationLink } from 'vscode';
+          LocationLink, 
+          TextEdit,
+          TextEditor} from 'vscode';
 
 import { getDepsInPackageJson, 
          Dependency, 
@@ -16,7 +18,7 @@ import * as ts from 'typescript';
 import * as path from "path";
 
 export default class Provider implements CodeLensProvider {
-    private _funcList: UsageInstance[] = [];
+    private _funcList: UsageInstance[] = []; // TODO: key funclist by document
     private _packageList: Dependency[] = [];
 
     constructor() {
@@ -34,24 +36,24 @@ export default class Provider implements CodeLensProvider {
     }   
 
     // Starts CodeLens by filling function list
-    async startCodelens() {
+    async startCodelens(document : TextDocument | undefined = window.activeTextEditor?.document) {
       this._funcList = []; 
-      const editor = window.activeTextEditor;
+      // const editor = window.activeTextEditor;
 
-      if (editor) {
+      if (document) {
         const sourceFile = ts.createSourceFile(
-          "test.ts", editor.document.getText(), ts.ScriptTarget.Latest
+          "test.ts", document.getText(), ts.ScriptTarget.Latest
         );
-        await this.getFunctionCalls(sourceFile, 0, sourceFile);    
+        await this.getFunctionCalls(document, sourceFile, 0, sourceFile);    
       }
       console.log(this._funcList);
-    }
+        }
 
     async provideCodeLenses(document: TextDocument): Promise<CodeLens[]> {
         let codeLens : CodeLens[] = [];
 
         if (workspace.getConfiguration("exampleusageplz").get("exampleUsageCodeLens", true)) {
-          await this.startCodelens();
+          await this.startCodelens(document);
 
           for(var i=0; i<this._funcList.length; i++){
             let args = [
@@ -71,9 +73,9 @@ export default class Provider implements CodeLensProvider {
   }
 
   // Traverse AST tree to get function calls
-  async getFunctionCalls(
+  async getFunctionCalls(document: TextDocument | undefined = window.activeTextEditor?.document,
     node: ts.Node, indentLevel: number, sourceFile: ts.SourceFile
-  ) {
+  ) : Promise<void> {
     if (ts.isCallExpression(node) && node.expression) {
       let expression : any = node.expression;
       let func = <ts.Identifier> expression.name;
@@ -88,7 +90,7 @@ export default class Provider implements CodeLensProvider {
             let endPos = new Position(line, character + funcName.length);
             let range = new Range(startPos, endPos);
 
-            let definition = await this.getDefinitionInfo(new Position(line, character));
+            let definition = await this.getDefinitionInfo(document, new Position(line, character));
             if(definition){
               // Check if instance is already in the list
               let found = this._funcList.find(instance => (instance._name === funcName && instance._line === line));
@@ -100,7 +102,7 @@ export default class Provider implements CodeLensProvider {
     }
 
     await Promise.all(node.getChildren(sourceFile).map(async (child) => {
-      await this.getFunctionCalls(child, indentLevel + 1, sourceFile);
+      await this.getFunctionCalls(document, child, indentLevel + 1, sourceFile);
     }));
   }
 
@@ -109,13 +111,13 @@ export default class Provider implements CodeLensProvider {
   }
 
   // Get definition information at a position if it is a node package
-  private async getDefinitionInfo(pos: Position): Promise<Dependency | undefined>{
-    const editor = window.activeTextEditor;
+  private async getDefinitionInfo(document: TextDocument | undefined = window.activeTextEditor?.document, pos: Position): Promise<Dependency | undefined>{
+    // const editor = window.activeTextEditor;
 
-    if (editor) {
+    if (document) {
         try {
           const referenceLocation = await commands.executeCommand('vscode.executeDefinitionProvider',
-              editor.document.uri, 
+              document.uri, 
               pos 
           )  as LocationLink[];
 
