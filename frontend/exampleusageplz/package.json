@@ -13,7 +13,8 @@
 		"onCommand:exampleusageplz.getUsage",
 		"onCommand:exampleusageplz.addUsageInfo",
 		"onCommand:exampleusageplz.quickPost",
-		"exampleusageplz.quickPost"
+		"exampleusageplz.quickPost",
+		"workspaceContains:**/package.json"
 	],
 	"main": "./dist/extension.js",
 	"contributes": {
@@ -43,7 +44,11 @@
 			"commandPalette": [
 				{
 					"command": "exampleusageplz.getUsage",
-					"when": "editorLangId == typescript || editorLangId == typescriptreact"
+					"when": "editorLangId == typescript || editorLangId == typescriptreact && config.exampleusageplz.exampleUsageCodeLens == false"
+				},
+				{
+					"command": "exampleusageplz.stopUsage",
+					"when": "editorLangId == typescript || editorLangId == typescriptreact && config.exampleusageplz.exampleUsageCodeLens == true"
 				},
 				{
 					"command": "exampleusageplz.quickPost",

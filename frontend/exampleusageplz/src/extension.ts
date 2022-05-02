@@ -25,10 +25,12 @@ export async function activate(context: vscode.ExtensionContext) {
 	
 	let openCodelensDisposable = vscode.commands.registerCommand("exampleusageplz.getUsage", async () => {
 		vscode.workspace.getConfiguration("exampleusageplz").update("exampleUsageCodeLens", true);
+		codeLensProvider.reload();
 	});
 
 	let stopCodelensDisposable = vscode.commands.registerCommand("exampleusageplz.stopUsage", async () => {
 		vscode.workspace.getConfiguration("exampleusageplz").update("exampleUsageCodeLens", false);
+		codeLensProvider.reload();
 	});
 
     let codelensDisposable = vscode.commands.registerCommand("exampleusageplz.addUsageInfo", (args: any) => {
@@ -43,7 +45,7 @@ export async function activate(context: vscode.ExtensionContext) {
 		vscode.window.showInformationMessage(`Got: ${result}`);
 	});
 
-
+	await vscode.commands.executeCommand("exampleusageplz.getUsage");
 	
 	context.subscriptions.push(codeLensProviderDisposable, openCodelensDisposable,
 								codelensDisposable, quickPostDisposable, virtualDocContentProvider);
