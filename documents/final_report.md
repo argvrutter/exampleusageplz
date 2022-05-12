@@ -7,7 +7,7 @@
 
 ### Motivation
 Consider the following scenario. I am developing a VSCode extension and referencing their documentation. The documentation has given me some useful examples and a high level understanding of where and how to make use of their API. I have an idea of what I want to accomplish, and I’m diving into implementation details. I’m looking at a piece of API documentation, for instance, maybe
-https://code.visualstudio.com/api/references/vscode-api#TextEditor.set Decorations
+https://code.visualstudio.com/api/references/vscode-api#TextEditor.set Decorations.
 
 The documentation tells me precisely what the parameters and what the call accomplishes. However, what I really want to know is ‘is this appropriate for my specific use case.’ I know what I want to do, and after browsing the API docs this sounds like something that could help me and/or save me time, but I can’t say how it would fit into my code without more background information. I’m looking for example usage. 
 
@@ -31,7 +31,7 @@ Developers can choose the most appropriate API/Library call for a given situatio
 
 ## Technology
 ### System
-Exampleusageplz is composed of a web front that enables navigation and/or searching of example usage for invocations of libraries, as well as submission. There will be Github mining for relevant snippets. The backend will employ a MySQL database for retrieving and storing content.
+Exampleusageplz is composed of a web front that enables navigation and/or searching of example usage for invocations of libraries, as well as submission. There is Github mining for relevant code snippets. The backend employs a MySQL database for retrieving and storing content.
 
 ### Block Diagram
   <!-- use the new mermaid feature -->
@@ -48,6 +48,7 @@ Exampleusageplz is composed of a web front that enables navigation and/or search
   ```
  
 ### Minimum Viable Product
+TODO:  
 A site with examples organized by the library/API as well as the specific invocations. Syntax highlighted code snippets. User curation features (ie, upvote)
     If full functionality of the project can't be completed in by the end of the semester deadline, the team will reduce the scale of the tool to focus on one specific task. This task may be providing code examples for a select few APIs that are stored statically or in a similar fashion. This is a minimum viable product and can still be functional as a proof of concept for the purpose of this project.
 
@@ -59,45 +60,44 @@ A site with examples organized by the library/API as well as the specific invoca
 * Track version information 
 
 ### Testing
-TODO: update  
+TODO:   
 We intend to incorporate Unit testing, functional tests, continuous integration as codebase enters a maintainable state.
     
 ### Tools
-TODO: Update  
-Tools such as Python, flask, MySQL, React.js will be used. WorldOfCode can be leveraged for mining of projects to document.
+TODO:   
+Python, Flask, Flask-SQLAlchemy & MySQL, React.js will be used. 
+WorldOfCode can be leveraged for mining of projects to document.
 
 ## Team
 ### Skills
-Aiden and Racheal has front end / full stack development background working with PAIRS lab, and from coursework (COSC340). Aiden has experience with repository mining and devops as well as REST APIs. Justin has a back end focused background with some full stack experience. All team members are proficient in Python.
+Aiden and Racheal have front end / full stack development background working with PAIRS lab, and from coursework (COSC340). Aiden has experience with repository mining and devops as well as REST APIs. Justin has a back end focused background with some full stack experience. All team members are proficient in Python.
 
 ### Roles
-TODO: Update  
-Aiden will the be project manager for the entirety of the project.
-Roles will be primarily fixed, however, if needed we may branch out and help eachother with specific parts of the project. Aiden will focus primarily on the repository mining, Racheal will focus primarily on front end implementation, and Justin will focus primarily on back end implementation. 
+Aiden was the be project manager for the entirety of the project.
+Roles were be primarily fixed, however, if needed we would branch out and help eachother with specific parts of the project. Aiden focused primarily on the repository mining and backend implementation, Racheal focused primarily on the frontend implementation, and Justin will focused primarily on backend implementation. 
 
 ## Project Management
-TODO: Update
-The completion on a minimum viable working version of this project seems feasible. The team plans to meet once to twice a week
+TODO: Update   
+The completion on a minimum viable working version of this project seems feasible. The team usually met up once to twice a week.
 
 ### Schedule 
-TODO: update  
+
     | Week        | Description|
     | ----------- | -----------|
-    | 02/21       | Sprint 1 - Primarily fimiliarize ourselves with the technologies that we are going to be using. 
-    | 02/28       | Sprint 1 - Keep familizarizing ourselves with the technologies. Work on setting up framework for the front end and back end. 
+    | 02/21       | Sprint 1 - Familiarize ourselves with the technologies that we are going to be using. 
+    | 02/28       | Sprint 1 - Keep familiarizing ourselves with the technologies. Work on setting up framework for the front end and back end. 
     | 03/07       | Sprint 2 - Mockup(s) for views on frontend
     | 03/14       | Sprint 2 - Development of database schemas
     | 03/21       | Sprint 3 - Implement prototype main page with search
-    | 03/28       | Sprint 3 - Implement prototype content schema and usage mining service
-    | 04/04       | Sprint 4 - Add user service, user registration & so on for frontend
+    | 03/28       | Sprint 3 - Implement prototype content schema and usage mining service. Unit Tests.
+    | 04/04       | Sprint 4 - Refine prototypes and conduct more tests.
     | 04/11       | Sprint 4 - Render and Integrate with content (curation)
     | 04/18       | Sprint 5 - Add repos
     | 04/25       | Sprint 5 - Finalize our proof of concept. 
     | 05/02       | Final week of class, present project.
 
 ### Process
-TODO: update  
-The team will be using Agile methodology using 2 week sprints. Agile is an itterative approach that makes use of incremental improvement through small and frequent sprints or releases. It is important for the team to use an itterative approach as it allows more flexibility. As our needs may change throughout the course of the semesters, it is important to gain feedback from our target customer and make modifications accordingly. This is more suitable than common choices such as the waterfall method, which focuses on developement all at once. Because our requirements may change, this was not suitable for the project. Something like pair programming was also not suitable; because the development timeframe for this project is so short, it is necessary that our resources are maximized across all functions of the project.
+The team utilized the Agile methodology using 2 week sprints. Agile is an itterative approach that makes use of incremental improvement through small and frequent sprints or releases. It is important for the team to use an itterative approach as it allows more flexibility. As our needs may have changed throughout the course of the semesters, it is important to gain feedback from our target customer and make modifications accordingly. This is more suitable than common choices such as the waterfall method, which focuses on developement all at once. Because our requirements may change, this was not suitable for the project. Something like pair programming was also not suitable; because the development timeframe for this project is so short, it is necessary that our resources are maximized across all functions of the project.
 
 
 ## Lessons Learned
@@ -105,3 +105,5 @@ TODO:
 
 ## Future Work
 TODO:    
+* User Features - Create user database models, allow for signing in via GitHub OAuth, link specific posts to users when a user posts them.
+* Like/Dislike on posts to allow better example usage to be shown first.
