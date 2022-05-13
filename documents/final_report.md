@@ -43,7 +43,11 @@ Backend that allows for CRUD (Create, Read, Update, Delete) operations on exampl
 
 The frontend is a VSCode extension that identifies eligible method calls as the user types, in this case, methods that are defined in a non-standard library. The minimum viable product focuses on typescript, but the approach should generalize to other languages. Of the eligible methods, a few will have code lens's appear to avoid being distracting. Programmers can interact with this to see a list of examples via 'peek mode'. See the figures below. 
 
+![](see_examples.gif)
+
 Finally, users can make usage posts with the extension's 'quick post' feature. Users select a region of text and use a context (right click) menu and submit a brief form via the VSCode 'quick input' feature.
+
+![](post.gif)
     
 ### Proposed Enhancements
 
