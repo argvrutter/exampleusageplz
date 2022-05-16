@@ -6,7 +6,8 @@ import { TextDocument,
           workspace,
           Position,
           commands,
-          LocationLink } from 'vscode';
+          LocationLink, 
+          EventEmitter} from 'vscode';
 
 import { getDepsInPackageJson, 
          Dependency, 
@@ -18,6 +19,8 @@ import * as path from "path";
 export default class Provider implements CodeLensProvider {
     private _funcList: UsageInstance[] = [];
     private _packageList: Dependency[] = [];
+    private readonly _onChangeCodeLensesEmitter = new EventEmitter<void>();
+    readonly onDidChangeCodeLenses = this._onChangeCodeLensesEmitter.event;
 
     constructor() {
       const rootPath =
@@ -30,8 +33,11 @@ export default class Provider implements CodeLensProvider {
           rootPath
         );
       }
-
     }   
+
+    reload() {
+      this._onChangeCodeLensesEmitter.fire();
+    }
 
     // Starts CodeLens by filling function list
     async startCodelens() {
