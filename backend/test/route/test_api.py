@@ -1,6 +1,7 @@
 from unittest import TestCase
 from app import create_app
 import json
+import os
 
 '''
 Methods:
@@ -18,8 +19,9 @@ Methods:
 class TestApi(TestCase):
 
     def setUp(self):
+        # export database uri to env SQLALCHEMY_DATABASE_URI'
+        os.environ["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///:memory:'
         self.app = create_app()#.test_client()
-        self.app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
         # set app db to use sqlite in memory
         self.app = self.app.test_client()
         self.app.testing = True
