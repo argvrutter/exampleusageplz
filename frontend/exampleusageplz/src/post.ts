@@ -13,7 +13,7 @@ import { Post, usageInstanceToCall } from './interface';
  */
 export async function showQuickPick(provider: Provider) {
 	const editor = window.activeTextEditor;
-	const baseUrl = 'http://localhost:5000';
+	const baseUrl = 'http://localhost:12000';
 
 	if (!editor) {
 		return;
