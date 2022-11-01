@@ -142,3 +142,10 @@ mining/build
 # sqllite test database
 backend/data.db
 data/mysql
+
+# mac os directory files
+.DS_Store
+
+# frontend 
+# out (transpiled from ts src)
+frontend/exampleusageplz/out/
