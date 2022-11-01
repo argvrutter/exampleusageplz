@@ -12,7 +12,7 @@
 
 ## Who We Are
 ### Founders
-* Aiden Rutter (@argvrutter) is a masters student in Computer Science at the University of Tennessee, Knoxville. He's had internship and research experiences at places like Amazon and Oak Ridge National Lab, applying git workflow, agile, and test-driven development. 
+* Aiden Butter (@argvrutter) is a masters student in Computer Science at the University of Tennessee, Knoxville. He's had internship and research experiences at places like Amazon and Oak Ridge National Lab, applying git workflow, agile, and test-driven development. 
 
 * Justin Langston (@jlangst6) is a masters student in Computer Science at the University of Tennessee, Knoxville. He's had two internships at mastercard applying the agile methodology and techniques for the processing of large transaction batch files. 
 
